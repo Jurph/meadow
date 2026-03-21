@@ -1,0 +1,77 @@
+[
+  {
+    "name": "kind: bug",
+    "color": "d73a4a",
+    "description": "Something is broken or behaving incorrectly."
+  },
+  {
+    "name": "kind: feature",
+    "color": "0e8a16",
+    "description": "A new capability or user-facing behavior."
+  },
+  {
+    "name": "kind: design",
+    "color": "1d76db",
+    "description": "A design, UX, or simulation-modeling question."
+  },
+  {
+    "name": "kind: research",
+    "color": "0b7285",
+    "description": "Investigation, prototyping, or technical discovery work."
+  },
+  {
+    "name": "kind: chore",
+    "color": "6b778c",
+    "description": "Repo maintenance, janitorial work, or internal upkeep."
+  },
+  {
+    "name": "kind: docs",
+    "color": "0052cc",
+    "description": "Documentation work."
+  },
+  {
+    "name": "area: simulation",
+    "color": "c2e0c6",
+    "description": "Core plant, ecology, and world-simulation logic."
+  },
+  {
+    "name": "area: rendering",
+    "color": "bfd4f2",
+    "description": "Panda3D scene, camera, terrain, and visual rendering."
+  },
+  {
+    "name": "area: ui",
+    "color": "f9d0c4",
+    "description": "Controls, inspector panels, and interaction design."
+  },
+  {
+    "name": "area: tooling",
+    "color": "fef2c0",
+    "description": "CI, packaging, scripts, and repository automation."
+  },
+  {
+    "name": "priority: now",
+    "color": "b60205",
+    "description": "Needs attention soon."
+  },
+  {
+    "name": "priority: soon",
+    "color": "fbca04",
+    "description": "Important, but not the next thing."
+  },
+  {
+    "name": "priority: later",
+    "color": "c5def5",
+    "description": "Worth keeping, but intentionally deferred."
+  },
+  {
+    "name": "good first issue",
+    "color": "7057ff",
+    "description": "A bounded task that should be approachable for a new contributor."
+  },
+  {
+    "name": "help wanted",
+    "color": "008672",
+    "description": "Extra help from contributors would be valuable here."
+  }
+]
