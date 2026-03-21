@@ -54,7 +54,7 @@ The current mental model:
 
 ## Repo chores to check after the first push
 
-- [ ] confirm GitHub Actions runs on `main`
+- [ ] confirm CircleCI runs on `main`
 - [ ] confirm the label-sync workflow creates the starter labels
 - [ ] add `CODECOV_TOKEN` if Codecov should be active immediately
 - [ ] verify README badges resolve after the first CI run

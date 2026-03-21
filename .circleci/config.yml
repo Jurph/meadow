@@ -1,0 +1,75 @@
+version: 2.1
+
+jobs:
+  checks:
+    docker:
+      - image: cimg/python:3.11
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            python -m venv .venv
+            . .venv/bin/activate
+            pip install --upgrade pip
+            pip install -e .[dev]
+      - run:
+          name: Run tests with coverage
+          command: |
+            . .venv/bin/activate
+            pytest --cov=src/meadow --cov-report=xml
+      - run:
+          name: Upload coverage to Codecov
+          command: |
+            if [ -z "${CODECOV_TOKEN:-}" ]; then
+              echo "CODECOV_TOKEN is not set; skipping Codecov upload."
+              exit 0
+            fi
+            . .venv/bin/activate
+            pip install codecov-cli
+            codecovcli do-upload --file coverage.xml
+      - run:
+          name: Run Ruff
+          command: |
+            . .venv/bin/activate
+            ruff check .
+            ruff format --check .
+      - run:
+          name: Run mypy
+          command: |
+            . .venv/bin/activate
+            mypy src
+
+  dependency-audit:
+    docker:
+      - image: cimg/python:3.11
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            python -m venv .venv
+            . .venv/bin/activate
+            pip install --upgrade pip
+            pip install -e .[dev]
+      - run:
+          name: Audit declared dependencies
+          command: |
+            . .venv/bin/activate
+            python scripts/audit_dependencies.py
+
+workflows:
+  main:
+    jobs:
+      - checks
+
+  nightly-dependency-audit:
+    triggers:
+      - schedule:
+          cron: "0 9 * * *"
+          filters:
+            branches:
+              only:
+                - main
+    jobs:
+      - dependency-audit

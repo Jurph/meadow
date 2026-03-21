@@ -1,6 +1,6 @@
 # meadow
 
-[![CI](https://github.com/Jurph/meadow/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Jurph/meadow/actions/workflows/ci.yml)
+[![CircleCI](https://circleci.com/gh/Jurph/meadow.svg?style=svg)](https://circleci.com/gh/Jurph/meadow)
 [![Codecov](https://codecov.io/gh/Jurph/meadow/branch/main/graph/badge.svg)](https://codecov.io/gh/Jurph/meadow)
 
 `meadow` is an in-progress terrarium sim about plant life under pressure.
@@ -96,9 +96,12 @@ uv run --locked --extra dev mypy src
 
 ## CI and coverage
 
-GitHub Actions runs tests, Ruff, and mypy on pushes and pull requests. Coverage upload is wired for
-Codecov and will start reporting once `CODECOV_TOKEN` is configured in the repository secrets and
-the first upload lands on `main`.
+CircleCI runs tests, Ruff, and mypy on pushes. Coverage upload is wired for Codecov and will start
+reporting once `CODECOV_TOKEN` is configured in the CircleCI project environment and the first
+upload lands on `main`.
+
+The repo still keeps one small GitHub-native workflow for syncing issue labels from
+`.github/labels.json`, because label automation has to run inside GitHub.
 
 If Codecov gets stuck in its half-initialized state during setup, run the helper from the repo
 root:
