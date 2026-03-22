@@ -193,3 +193,31 @@ This spec is ready for **`writing-plans`** to break into implementation tasks on
 **Revision history**
 
 - 2026-03-21 — Initial draft from Vision doc, brainstorming, and *Growth Is Not Optional* alignment.
+- 2026-03-21 — Addendum: Z-axis and fractal plant geometry (below).
+
+---
+
+## Addendum A: Z-axis (layered hex grid)
+
+**Decision:** `z=0` is the surface. Negative z is underground (roots). Positive z is aboveground (stems, leaves). `HexCell(q, r, z)` is the 3D coordinate; `Axial(q, r)` remains for column-level (horizontal-only) operations.
+
+**Grid:** `HexGrid(width, height, min_z, max_z)` with configurable vertical range. Default `min_z=-20`, `max_z=50` (20 cm soil, 50 cm canopy — adequate for meadow plants; trees expand later).
+
+**Topology:** Lateral neighbors (6) at the same z-level use existing axial math. Vertical neighbors (up/down) are `z ± 1`. A `neighbors_3d(HexCell)` function returns all 8.
+
+**WorldState strategy (incremental):** Protocols (`WorldView`, `WorldMutator`) accept `HexCell` immediately so all consumer code is 3D-aware. The backing `WorldState` stays **2D (surface) arrays internally** until a later phase adds real per-depth simulation. Methods extract `(q, r)` from HexCell and ignore `z` for now. This means roots at z=-5 currently read the same moisture as z=0 — acceptable because the simulation doesn't model subsurface variation yet.
+
+**Fields:**
+- **Per-cell (future 3D):** moisture, nutrients, light.
+- **Per-column (always 2D):** slope_q, slope_r, primary occupant.
+- **Drainage:** per-column for now, upgradeable to per-depth later.
+
+**Flow:** Operates on the surface layer (columns). Real percolation (downward water movement) is a future phase.
+
+## Addendum B: Fractal plant geometry
+
+**Trait placeholders:** `TraitBundle` gains `branching_angle`, `branching_frequency`, `taper_ratio`, `apical_dominance` — all defaulted, not yet used by growth logic.
+
+**PlantBody:** Uses `HexCell` for root and leaf positions. Roots live at `z ≤ 0`, leaves at `z ≥ 0`. `home` becomes `HexCell`. A future `PlantGraph` representation (tree/DAG of stem/root segments) will replace flat hex sets; for now the sets are the canonical representation.
+
+**Growth algorithm:** Not implemented yet. When cellulose is allocated to roots or leaves, the branching traits will govern *how* the body expands (angle, frequency, taper). For now, allocation is computed but not acted upon.
