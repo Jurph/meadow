@@ -20,7 +20,7 @@ from meadow.world_state import WorldState
 
 
 def _build_phase3_pipeline(
-    pop: PlantPopulation, rainfall: float = 2.0
+    pop: PlantPopulation, grid: HexGrid, rainfall: float = 2.0
 ) -> TurnPipeline:
     return TurnPipeline({
         PhaseName.WEATHER: WeatherPhase(rainfall_per_tick=rainfall),
@@ -28,7 +28,7 @@ def _build_phase3_pipeline(
         PhaseName.LIGHT: LightPhase(base_sunlight=1.0),
         PhaseName.UPTAKE: UptakePhase(pop),
         PhaseName.DEPLETION: NoOpPhase(PhaseName.DEPLETION),
-        PhaseName.GROWTH: GrowthPhase(pop),
+        PhaseName.GROWTH: GrowthPhase(pop, grid),
     })
 
 
@@ -45,7 +45,7 @@ class TestPhase3Integration:
         _seed_uniform_nutrients(ws, 50.0)
         pop = PlantPopulation()
         plant = pop.register(home=HexCell(2, 2, 0))
-        pipeline = _build_phase3_pipeline(pop)
+        pipeline = _build_phase3_pipeline(pop, grid)
 
         pipeline.run_tick(ws, ws, TurnContext(tick=0, weather_seed=0))
 
@@ -57,7 +57,7 @@ class TestPhase3Integration:
         pop = PlantPopulation()
         home = HexCell(2, 2, 0)
         pop.register(home=home, traits=TraitBundle(root_reach=0.5))
-        pipeline = _build_phase3_pipeline(pop, rainfall=4.0)
+        pipeline = _build_phase3_pipeline(pop, grid, rainfall=4.0)
 
         pipeline.run_tick(ws, ws, TurnContext(tick=0, weather_seed=0))
 
@@ -76,7 +76,7 @@ class TestPhase3Integration:
                 root_reach=0.5,
             ),
         )
-        pipe_grass = _build_phase3_pipeline(pop_grass, rainfall=10.0)
+        pipe_grass = _build_phase3_pipeline(pop_grass, grid, rainfall=10.0)
         pipe_grass.run_tick(ws_grass, ws_grass, TurnContext(tick=0, weather_seed=0))
 
         ws_maple = WorldState(grid)
@@ -89,7 +89,7 @@ class TestPhase3Integration:
                 root_reach=0.5,
             ),
         )
-        pipe_maple = _build_phase3_pipeline(pop_maple, rainfall=10.0)
+        pipe_maple = _build_phase3_pipeline(pop_maple, grid, rainfall=10.0)
         pipe_maple.run_tick(ws_maple, ws_maple, TurnContext(tick=0, weather_seed=0))
 
         assert maple.cellulose > grass.cellulose
@@ -100,7 +100,7 @@ class TestPhase3Integration:
         _seed_uniform_nutrients(ws, 200.0)
         pop = PlantPopulation()
         plant = pop.register(home=HexCell(2, 2, 0))
-        pipeline = _build_phase3_pipeline(pop)
+        pipeline = _build_phase3_pipeline(pop, grid)
 
         for tick in range(5):
             pipeline.run_tick(ws, ws, TurnContext(tick=tick, weather_seed=tick))
@@ -108,9 +108,10 @@ class TestPhase3Integration:
         assert plant.cellulose > 0.0
 
     def test_full_tick_completes_with_6_results(self):
-        ws = WorldState(HexGrid(5, 5))
+        grid = HexGrid(5, 5)
+        ws = WorldState(grid)
         pop = PlantPopulation()
         pop.register(home=HexCell(2, 2, 0))
-        pipeline = _build_phase3_pipeline(pop)
+        pipeline = _build_phase3_pipeline(pop, grid)
         results = pipeline.run_tick(ws, ws, TurnContext(tick=0, weather_seed=0))
         assert len(results) == 6
