@@ -1,4 +1,4 @@
-"""Tests for plant domain."""
+﻿"""Tests for plant domain."""
 
 import pytest
 
@@ -73,12 +73,13 @@ class TestTraitBundle:
         t = TraitBundle()
         assert t.alloc_root == t.alloc_leaf == t.alloc_stem == t.alloc_reproduce
 
-    def test_branching_traits_have_defaults(self):
+    def test_zone_based_trait_defaults(self):
         t = TraitBundle()
-        assert t.branching_angle == 30.0
-        assert t.branching_frequency == 0.3
-        assert t.taper_ratio == 0.7
-        assert t.apical_dominance == 0.8
+        assert t.basal_length > 0
+        assert t.branch_spacing > 0
+        assert t.max_root_length > 0
+        assert t.gravitropism_weight > 0
+        assert t.cellulose_per_segment > 0
 
 
 class TestPlantBody:
@@ -112,3 +113,20 @@ class TestPlantWithBody:
         assert p.moisture_reserve == 0.0
         assert p.nutrient_reserve == 0.0
         assert p.cellulose == 0.0
+
+    def test_register_with_home_creates_graph(self):
+        pop = PlantPopulation()
+        p = pop.register(home=HexCell(2, 2, 0))
+        assert p.body is not None
+        assert p.body.graph is not None
+        assert len(p.body.graph.tips) == 2  # root + stem
+
+    def test_root_hexes_from_graph(self):
+        pop = PlantPopulation()
+        p = pop.register(home=HexCell(3, 3, 0))
+        assert HexCell(3, 3, 0) in p.body.root_hexes
+
+    def test_leaf_hexes_from_graph(self):
+        pop = PlantPopulation()
+        p = pop.register(home=HexCell(3, 3, 0))
+        assert HexCell(3, 3, 0) in p.body.leaf_hexes

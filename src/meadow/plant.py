@@ -1,4 +1,4 @@
-"""Plant domain: identity, traits, body plan, and population registry.
+﻿"""Plant domain: identity, traits, body plan, and population registry.
 
 Growth forms (grass, taproot, woody) are parameter-driven, not subclass-driven.
 Leaf shape is encoded via number_of_lobes, lobe_aspect_ratio, and lobe_length
@@ -10,6 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from meadow.hex import HexCell
+from meadow.plant_graph import PlantGraph
 
 _LOBE_SHAPE_FACTOR: float = 0.7
 
@@ -32,11 +33,20 @@ class TraitBundle:
     alloc_stem: float = 0.25
     alloc_reproduce: float = 0.25
 
-    # Branching geometry (placeholders for fractal growth)
-    branching_angle: float = 30.0
-    branching_frequency: float = 0.3
-    taper_ratio: float = 0.7
-    apical_dominance: float = 0.8
+    # Zone-based branching (per Mußmann et al. 2024)
+    basal_length: float = 1.0
+    branch_spacing: float = 0.8
+    apical_length: float = 1.0
+    max_root_length: float = 15.0
+    branch_probability: float = 0.5
+
+    # Tropism weights
+    gravitropism_weight: float = 1.0
+    hydrotropism_weight: float = 0.3
+    gsa_root: float = 60.0
+
+    # Growth cost
+    cellulose_per_segment: float = 1.0
 
     @property
     def effective_leaf_area(self) -> float:
@@ -52,14 +62,27 @@ class PlantBody:
     """Spatial footprint of a plant on the hex grid."""
 
     home: HexCell
-    root_hexes: set[HexCell] | None = None
-    leaf_hexes: set[HexCell] | None = None
+    graph: PlantGraph | None = None
+    _root_hexes: set[HexCell] | None = None
+    _leaf_hexes: set[HexCell] | None = None
 
     def __post_init__(self):
-        if self.root_hexes is None:
-            self.root_hexes = {self.home}
-        if self.leaf_hexes is None:
-            self.leaf_hexes = {self.home}
+        if self.graph is None and self._root_hexes is None:
+            self._root_hexes = {self.home}
+        if self.graph is None and self._leaf_hexes is None:
+            self._leaf_hexes = {self.home}
+
+    @property
+    def root_hexes(self) -> set[HexCell]:
+        if self.graph is not None:
+            return self.graph.root_cells
+        return self._root_hexes or set()
+
+    @property
+    def leaf_hexes(self) -> set[HexCell]:
+        if self.graph is not None:
+            return self.graph.leaf_cells
+        return self._leaf_hexes or set()
 
 
 @dataclass
@@ -84,7 +107,10 @@ class PlantPopulation:
         traits: TraitBundle | None = None,
         home: HexCell | None = None,
     ) -> Plant:
-        body = PlantBody(home=home) if home is not None else None
+        if home is not None:
+            body = PlantBody(home=home, graph=PlantGraph.create_seed(home))
+        else:
+            body = None
         plant = Plant(id=self._next_id, traits=traits or TraitBundle(), body=body)
         self._plants[self._next_id] = plant
         self._next_id += 1
