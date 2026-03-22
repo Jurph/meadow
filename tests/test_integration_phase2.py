@@ -1,4 +1,4 @@
-﻿"""Phase 2 integration: full tick with real WorldState and weather/flow/light.
+"""Phase 2 integration: full tick with real WorldState and weather/flow/light.
 
 Key invariants tested:
 - Mass conservation through a complete tick
@@ -10,7 +10,7 @@ import numpy as np
 import pytest
 
 from meadow.flow import FlowPhase
-from meadow.hex import HexGrid
+from meadow.hex import HexGrid, surface
 from meadow.light import LightPhase
 from meadow.phases import NoOpPhase, PhaseName
 from meadow.sim import TurnPipeline
@@ -43,7 +43,7 @@ class TestPhase2Integration:
         grid = HexGrid(8, 8)
         ws = WorldState(grid)
         for h in grid:
-            ws.slope_q[ws._idx(h)] = 0.2
+            ws.slope_q[ws._col_idx(h.q, h.r)] = 0.2
         pipeline = _build_phase2_pipeline(rainfall=2.0)
 
         expected_added = 2.0 * len(grid)
@@ -55,8 +55,8 @@ class TestPhase2Integration:
         grid = HexGrid(6, 6)
         ws = WorldState(grid)
         for h in grid:
-            ws.slope_q[ws._idx(h)] = 0.8
-            ws.slope_r[ws._idx(h)] = 0.3
+            ws.slope_q[ws._col_idx(h.q, h.r)] = 0.8
+            ws.slope_r[ws._col_idx(h.q, h.r)] = 0.3
         pipeline = _build_phase2_pipeline(rainfall=0.1)
 
         for tick in range(20):
@@ -71,8 +71,8 @@ class TestPhase2Integration:
 
         pipeline.run_tick(ws, ws, TurnContext(tick=0, weather_seed=0))
 
-        for h in grid:
-            assert ws.light_at(h) == pytest.approx(0.9)
+        for col in grid:
+            assert ws.light_at(surface(col)) == pytest.approx(0.9)
 
     def test_multi_tick_moisture_accumulates(self):
         grid = HexGrid(5, 5)

@@ -1,14 +1,15 @@
-﻿"""Concrete world state backed by numpy arrays.
+"""Concrete world state backed by numpy arrays.
 
 Implements both WorldView (reads) and WorldMutator (writes).
 Arrays are flat, indexed by (q * grid.height + r).
+Z is accepted in signatures but ignored for now (2D projection).
 """
 
 from __future__ import annotations
 
 import numpy as np
 
-from meadow.hex import Axial, HexGrid
+from meadow.hex import Axial, HexCell, HexGrid
 
 _NO_OCCUPANT: int = -1
 
@@ -27,38 +28,39 @@ class WorldState:
         self.slope_r = np.zeros(n, dtype=np.float64)
         self._occupants = np.full(n, _NO_OCCUPANT, dtype=np.int64)
 
-    def _idx(self, h: Axial) -> int:
-        return h.q * self.grid.height + h.r
+    def _col_idx(self, q: int, r: int) -> int:
+        return q * self.grid.height + r
 
     # --- WorldView ---
 
-    def moisture_at(self, h: Axial) -> float:
-        return float(self.moisture[self._idx(h)])
+    def moisture_at(self, h: HexCell) -> float:
+        return float(self.moisture[self._col_idx(h.q, h.r)])
 
-    def nutrients_at(self, h: Axial) -> float:
-        return float(self.nutrients[self._idx(h)])
+    def nutrients_at(self, h: HexCell) -> float:
+        return float(self.nutrients[self._col_idx(h.q, h.r)])
 
-    def light_at(self, h: Axial) -> float:
-        return float(self.light[self._idx(h)])
+    def light_at(self, h: HexCell) -> float:
+        return float(self.light[self._col_idx(h.q, h.r)])
 
-    def occupant_id_at(self, h: Axial) -> int | None:
-        v = int(self._occupants[self._idx(h)])
+    def occupant_id_at(self, col: Axial) -> int | None:
+        v = int(self._occupants[self._col_idx(col.q, col.r)])
         return None if v == _NO_OCCUPANT else v
 
     # --- WorldMutator ---
 
     def apply_flow_delta(
-        self, h: Axial, moisture_delta: float, nutrient_delta: float
+        self, h: HexCell, moisture_delta: float, nutrient_delta: float
     ) -> None:
-        i = self._idx(h)
+        i = self._col_idx(h.q, h.r)
         self.moisture[i] += moisture_delta
         self.nutrients[i] += nutrient_delta
 
-    def set_light(self, h: Axial, value: float) -> None:
-        self.light[self._idx(h)] = value
+    def set_light(self, h: HexCell, value: float) -> None:
+        self.light[self._col_idx(h.q, h.r)] = value
 
-    def set_occupant(self, h: Axial, plant_id: int | None) -> None:
-        self._occupants[self._idx(h)] = _NO_OCCUPANT if plant_id is None else plant_id
+    def set_occupant(self, col: Axial, plant_id: int | None) -> None:
+        v = _NO_OCCUPANT if plant_id is None else plant_id
+        self._occupants[self._col_idx(col.q, col.r)] = v
 
     # --- Aggregate queries (for diagnostics / tests) ---
 

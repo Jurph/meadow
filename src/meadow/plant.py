@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from meadow.hex import Axial
+from meadow.hex import HexCell
 
 _LOBE_SHAPE_FACTOR: float = 0.7
 
@@ -32,6 +32,12 @@ class TraitBundle:
     alloc_stem: float = 0.25
     alloc_reproduce: float = 0.25
 
+    # Branching geometry (placeholders for fractal growth)
+    branching_angle: float = 30.0
+    branching_frequency: float = 0.3
+    taper_ratio: float = 0.7
+    apical_dominance: float = 0.8
+
     @property
     def effective_leaf_area(self) -> float:
         """Approximate single-leaf area in cm^2 from lobe geometry."""
@@ -45,9 +51,9 @@ class TraitBundle:
 class PlantBody:
     """Spatial footprint of a plant on the hex grid."""
 
-    home: Axial
-    root_hexes: set[Axial] | None = None
-    leaf_hexes: set[Axial] | None = None
+    home: HexCell
+    root_hexes: set[HexCell] | None = None
+    leaf_hexes: set[HexCell] | None = None
 
     def __post_init__(self):
         if self.root_hexes is None:
@@ -76,7 +82,7 @@ class PlantPopulation:
     def register(
         self,
         traits: TraitBundle | None = None,
-        home: Axial | None = None,
+        home: HexCell | None = None,
     ) -> Plant:
         body = PlantBody(home=home) if home is not None else None
         plant = Plant(id=self._next_id, traits=traits or TraitBundle(), body=body)

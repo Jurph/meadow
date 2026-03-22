@@ -1,8 +1,8 @@
-﻿"""Tests for the uptake phase."""
+"""Tests for the uptake phase."""
 
 import pytest
 
-from meadow.hex import Axial, HexGrid
+from meadow.hex import HexCell, HexGrid
 from meadow.phases import PhaseName
 from meadow.plant import PlantPopulation, TraitBundle
 from meadow.uptake import UptakePhase
@@ -19,10 +19,10 @@ class TestUptakePhase:
         grid = HexGrid(5, 5)
         ws = WorldState(grid)
         pop = PlantPopulation()
-        home = Axial(2, 2)
+        home = HexCell(2, 2, 0)
         plant = pop.register(home=home, traits=TraitBundle(root_reach=0.5))
-        ws.moisture[ws._idx(home)] = 10.0
-        ws.nutrients[ws._idx(home)] = 6.0
+        ws.moisture[ws._col_idx(home.q, home.r)] = 10.0
+        ws.nutrients[ws._col_idx(home.q, home.r)] = 6.0
 
         UptakePhase(pop).execute(ws, ws, TurnContext(tick=0, weather_seed=0))
 
@@ -41,12 +41,12 @@ class TestUptakePhase:
         grid = HexGrid(3, 3)
         ws = WorldState(grid)
         pop = PlantPopulation()
-        home = Axial(1, 1)
+        home = HexCell(1, 1, 0)
         plant = pop.register(home=home, traits=TraitBundle(root_reach=0.5))
 
         for tick in range(3):
-            ws.moisture[ws._idx(home)] = 4.0
-            ws.nutrients[ws._idx(home)] = 2.0
+            ws.moisture[ws._col_idx(home.q, home.r)] = 4.0
+            ws.nutrients[ws._col_idx(home.q, home.r)] = 2.0
             UptakePhase(pop).execute(ws, ws, TurnContext(tick=tick, weather_seed=0))
 
         assert plant.moisture_reserve == pytest.approx(6.0)
@@ -55,7 +55,7 @@ class TestUptakePhase:
     def test_result_has_diagnostics(self):
         ws = WorldState(HexGrid(3, 3))
         pop = PlantPopulation()
-        pop.register(home=Axial(1, 1))
+        pop.register(home=HexCell(1, 1, 0))
         ws.moisture[:] = 5.0
         ws.nutrients[:] = 3.0
         result = UptakePhase(pop).execute(ws, ws, TurnContext(tick=0, weather_seed=0))

@@ -1,6 +1,6 @@
-﻿"""Tests for world contracts and value types."""
+"""Tests for world contracts and value types."""
 
-from meadow.hex import Axial
+from meadow.hex import Axial, HexCell
 from meadow.world import (
     SIM_API_VERSION,
     PhaseResult,
@@ -37,16 +37,16 @@ class TestProtocolsAreRuntimeCheckable:
 
     def test_world_view_is_protocol(self):
         class FakeView:
-            def moisture_at(self, h: Axial) -> float:
+            def moisture_at(self, h: HexCell) -> float:
                 return 0.0
 
-            def nutrients_at(self, h: Axial) -> float:
+            def nutrients_at(self, h: HexCell) -> float:
                 return 0.0
 
-            def light_at(self, h: Axial) -> float:
+            def light_at(self, h: HexCell) -> float:
                 return 0.0
 
-            def occupant_id_at(self, h: Axial) -> int | None:
+            def occupant_id_at(self, col: Axial) -> int | None:
                 return None
 
         assert isinstance(FakeView(), WorldView)
@@ -54,14 +54,14 @@ class TestProtocolsAreRuntimeCheckable:
     def test_world_mutator_is_protocol(self):
         class FakeMutator:
             def apply_flow_delta(
-                self, h: Axial, moisture_delta: float, nutrient_delta: float
+                self, h: HexCell, moisture_delta: float, nutrient_delta: float
             ) -> None:
                 pass
 
-            def set_light(self, h: Axial, value: float) -> None:
+            def set_light(self, h: HexCell, value: float) -> None:
                 pass
 
-            def set_occupant(self, h: Axial, plant_id: int | None) -> None:
+            def set_occupant(self, col: Axial, plant_id: int | None) -> None:
                 pass
 
         assert isinstance(FakeMutator(), WorldMutator)

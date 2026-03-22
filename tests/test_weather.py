@@ -1,8 +1,8 @@
-﻿"""Tests for the weather phase."""
+"""Tests for the weather phase."""
 
 import pytest
 
-from meadow.hex import HexGrid
+from meadow.hex import HexGrid, surface
 from meadow.phases import PhaseName
 from meadow.weather import WeatherPhase
 from meadow.world import TurnContext
@@ -22,8 +22,8 @@ class TestWeatherPhase:
 
         phase.execute(ws, ws, ctx)
 
-        for h in grid:
-            assert ws.moisture_at(h) == pytest.approx(2.5)
+        for col in grid:
+            assert ws.moisture_at(surface(col)) == pytest.approx(2.5)
 
     def test_rainfall_accumulates_over_ticks(self):
         grid = HexGrid(3, 3)

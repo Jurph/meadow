@@ -1,6 +1,6 @@
-﻿"""Tests for phase contracts and ordering."""
+"""Tests for phase contracts and ordering."""
 
-from meadow.hex import Axial
+from meadow.hex import Axial, HexCell
 from meadow.phases import PHASE_ORDER, NoOpPhase, Phase, PhaseName
 from meadow.world import PhaseResult, TurnContext
 
@@ -23,15 +23,15 @@ class TestNoOpPhase:
         phase = NoOpPhase(PhaseName.FLOW)
 
         class StubView:
-            def moisture_at(self, h: Axial) -> float: return 0.0
-            def nutrients_at(self, h: Axial) -> float: return 0.0
-            def light_at(self, h: Axial) -> float: return 0.0
-            def occupant_id_at(self, h: Axial) -> int | None: return None
+            def moisture_at(self, h: HexCell) -> float: return 0.0
+            def nutrients_at(self, h: HexCell) -> float: return 0.0
+            def light_at(self, h: HexCell) -> float: return 0.0
+            def occupant_id_at(self, col: Axial) -> int | None: return None
 
         class StubMutator:
-            def apply_flow_delta(self, h, md, nd): pass
-            def set_light(self, h, v): pass
-            def set_occupant(self, h, pid): pass
+            def apply_flow_delta(self, h: HexCell, md: float, nd: float) -> None: pass
+            def set_light(self, h: HexCell, v: float) -> None: pass
+            def set_occupant(self, col: Axial, pid: int | None) -> None: pass
 
         ctx = TurnContext(tick=0, weather_seed=1)
         result = phase.execute(StubView(), StubMutator(), ctx)

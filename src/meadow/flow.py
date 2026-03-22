@@ -1,4 +1,4 @@
-﻿"""Flow phase: slope-driven moisture and nutrient redistribution.
+"""Flow phase: slope-driven moisture and nutrient redistribution.
 
 v1 simplification: for each hex, outflow to in-bounds neighbors is proportional
 to (slope dot direction-to-neighbor) * drainage.  Deltas are computed
@@ -28,7 +28,7 @@ def _compute_flow_deltas(ws: WorldState) -> tuple[np.ndarray, np.ndarray]:
     n_delta = np.zeros(n, dtype=np.float64)
 
     for h in grid:
-        i = ws._idx(h)
+        i = ws._col_idx(h.q, h.r)
         m_here = ws.moisture[i]
         n_here = ws.nutrients[i]
         if m_here <= 0:
@@ -47,7 +47,7 @@ def _compute_flow_deltas(ws: WorldState) -> tuple[np.ndarray, np.ndarray]:
             dot = sq * d.q + sr * d.r
             if dot > 0:
                 w = dot * drain
-                weights.append((ws._idx(nb), w))
+                weights.append((ws._col_idx(nb.q, nb.r), w))
                 total_weight += w
 
         if total_weight <= 0:

@@ -1,24 +1,24 @@
-﻿"""Tests for the turn pipeline orchestrator."""
+"""Tests for the turn pipeline orchestrator."""
 
 import pytest
 
-from meadow.hex import Axial, HexGrid
+from meadow.hex import Axial, HexCell, HexGrid
 from meadow.phases import PHASE_ORDER, NoOpPhase, PhaseName
 from meadow.sim import TurnPipeline
 from meadow.world import TurnContext
 
 
 class StubView:
-    def moisture_at(self, h: Axial) -> float: return 0.0
-    def nutrients_at(self, h: Axial) -> float: return 0.0
-    def light_at(self, h: Axial) -> float: return 0.0
-    def occupant_id_at(self, h: Axial) -> int | None: return None
+    def moisture_at(self, h: HexCell) -> float: return 0.0
+    def nutrients_at(self, h: HexCell) -> float: return 0.0
+    def light_at(self, h: HexCell) -> float: return 0.0
+    def occupant_id_at(self, col: Axial) -> int | None: return None
 
 
 class StubMutator:
-    def apply_flow_delta(self, h, md, nd): pass
-    def set_light(self, h, v): pass
-    def set_occupant(self, h, pid): pass
+    def apply_flow_delta(self, h: HexCell, md: float, nd: float) -> None: pass
+    def set_light(self, h: HexCell, v: float) -> None: pass
+    def set_occupant(self, col: Axial, pid: int | None) -> None: pass
 
 
 def _all_noop_phases() -> dict[PhaseName, NoOpPhase]:

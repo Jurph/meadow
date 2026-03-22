@@ -2,7 +2,7 @@
 
 import pytest
 
-from meadow.hex import Axial
+from meadow.hex import HexCell
 from meadow.plant import PlantBody, PlantPopulation, TraitBundle
 
 
@@ -73,16 +73,23 @@ class TestTraitBundle:
         t = TraitBundle()
         assert t.alloc_root == t.alloc_leaf == t.alloc_stem == t.alloc_reproduce
 
+    def test_branching_traits_have_defaults(self):
+        t = TraitBundle()
+        assert t.branching_angle == 30.0
+        assert t.branching_frequency == 0.3
+        assert t.taper_ratio == 0.7
+        assert t.apical_dominance == 0.8
+
 
 class TestPlantBody:
     def test_home_in_root_and_leaf_sets(self):
-        home = Axial(3, 3)
+        home = HexCell(3, 3, 0)
         body = PlantBody(home=home)
         assert home in body.root_hexes
         assert home in body.leaf_hexes
 
     def test_body_starts_single_hex(self):
-        body = PlantBody(home=Axial(0, 0))
+        body = PlantBody(home=HexCell(0, 0, 0))
         assert len(body.root_hexes) == 1
         assert len(body.leaf_hexes) == 1
 
@@ -90,9 +97,9 @@ class TestPlantBody:
 class TestPlantWithBody:
     def test_register_with_home_creates_body(self):
         pop = PlantPopulation()
-        p = pop.register(home=Axial(2, 2))
+        p = pop.register(home=HexCell(2, 2, 0))
         assert p.body is not None
-        assert p.body.home == Axial(2, 2)
+        assert p.body.home == HexCell(2, 2, 0)
 
     def test_register_without_home_has_no_body(self):
         pop = PlantPopulation()
@@ -101,7 +108,7 @@ class TestPlantWithBody:
 
     def test_plant_reserves_start_at_zero(self):
         pop = PlantPopulation()
-        p = pop.register(home=Axial(0, 0))
+        p = pop.register(home=HexCell(0, 0, 0))
         assert p.moisture_reserve == 0.0
         assert p.nutrient_reserve == 0.0
         assert p.cellulose == 0.0

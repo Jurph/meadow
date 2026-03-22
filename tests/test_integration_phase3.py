@@ -1,4 +1,4 @@
-﻿"""Phase 3 integration: full tick with a real plant on a real grid.
+"""Phase 3 integration: full tick with a real plant on a real grid.
 
 Key invariants:
 - Plant accumulates cellulose after one tick with moisture, nutrients, and light
@@ -8,7 +8,7 @@ Key invariants:
 
 from meadow.flow import FlowPhase
 from meadow.growth import GrowthPhase
-from meadow.hex import Axial, HexGrid
+from meadow.hex import HexCell, HexGrid, surface
 from meadow.light import LightPhase
 from meadow.phases import NoOpPhase, PhaseName
 from meadow.plant import PlantPopulation, TraitBundle
@@ -34,8 +34,8 @@ def _build_phase3_pipeline(
 
 def _seed_uniform_nutrients(ws: WorldState, amount: float) -> None:
     """Tiles start with no nutrients; weather only adds moisture."""
-    for h in ws.grid:
-        ws.apply_flow_delta(h, 0.0, amount)
+    for col in ws.grid:
+        ws.apply_flow_delta(surface(col), 0.0, amount)
 
 
 class TestPhase3Integration:
@@ -44,7 +44,7 @@ class TestPhase3Integration:
         ws = WorldState(grid)
         _seed_uniform_nutrients(ws, 50.0)
         pop = PlantPopulation()
-        plant = pop.register(home=Axial(2, 2))
+        plant = pop.register(home=HexCell(2, 2, 0))
         pipeline = _build_phase3_pipeline(pop)
 
         pipeline.run_tick(ws, ws, TurnContext(tick=0, weather_seed=0))
@@ -55,7 +55,7 @@ class TestPhase3Integration:
         grid = HexGrid(5, 5)
         ws = WorldState(grid)
         pop = PlantPopulation()
-        home = Axial(2, 2)
+        home = HexCell(2, 2, 0)
         pop.register(home=home, traits=TraitBundle(root_reach=0.5))
         pipeline = _build_phase3_pipeline(pop, rainfall=4.0)
 
@@ -70,7 +70,7 @@ class TestPhase3Integration:
         _seed_uniform_nutrients(ws_grass, 50.0)
         pop_grass = PlantPopulation()
         grass = pop_grass.register(
-            home=Axial(2, 2),
+            home=HexCell(2, 2, 0),
             traits=TraitBundle(
                 number_of_lobes=1.0, lobe_aspect_ratio=20.0, lobe_length=15.0,
                 root_reach=0.5,
@@ -83,7 +83,7 @@ class TestPhase3Integration:
         _seed_uniform_nutrients(ws_maple, 50.0)
         pop_maple = PlantPopulation()
         maple = pop_maple.register(
-            home=Axial(2, 2),
+            home=HexCell(2, 2, 0),
             traits=TraitBundle(
                 number_of_lobes=5.0, lobe_aspect_ratio=1.5, lobe_length=8.0,
                 root_reach=0.5,
@@ -99,7 +99,7 @@ class TestPhase3Integration:
         ws = WorldState(grid)
         _seed_uniform_nutrients(ws, 200.0)
         pop = PlantPopulation()
-        plant = pop.register(home=Axial(2, 2))
+        plant = pop.register(home=HexCell(2, 2, 0))
         pipeline = _build_phase3_pipeline(pop)
 
         for tick in range(5):
@@ -110,7 +110,7 @@ class TestPhase3Integration:
     def test_full_tick_completes_with_6_results(self):
         ws = WorldState(HexGrid(5, 5))
         pop = PlantPopulation()
-        pop.register(home=Axial(2, 2))
+        pop.register(home=HexCell(2, 2, 0))
         pipeline = _build_phase3_pipeline(pop)
         results = pipeline.run_tick(ws, ws, TurnContext(tick=0, weather_seed=0))
         assert len(results) == 6

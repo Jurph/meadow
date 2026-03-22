@@ -1,4 +1,4 @@
-﻿"""Tests for the flow phase — slope-driven moisture/nutrient redistribution.
+"""Tests for the flow phase — slope-driven moisture/nutrient redistribution.
 
 Key invariant: total moisture and nutrients are conserved (closed boundary).
 """
@@ -7,7 +7,7 @@ import numpy as np
 import pytest
 
 from meadow.flow import FlowPhase
-from meadow.hex import Axial, HexGrid
+from meadow.hex import Axial, HexCell, HexGrid
 from meadow.phases import PhaseName
 from meadow.world import TurnContext
 from meadow.world_state import WorldState
@@ -41,7 +41,7 @@ class TestFlowConservation:
         ws = WorldState(grid)
         ws.moisture[:] = 5.0
         for h in grid:
-            i = ws._idx(h)
+            i = ws._col_idx(h.q, h.r)
             ws.slope_q[i] = 0.3
             ws.slope_r[i] = -0.1
         before = ws.total_moisture()
@@ -56,7 +56,7 @@ class TestFlowConservation:
         ws.nutrients[:] = 2.0
         ws.moisture[:] = 5.0
         for h in grid:
-            ws.slope_q[ws._idx(h)] = 0.5
+            ws.slope_q[ws._col_idx(h.q, h.r)] = 0.5
         before = ws.total_nutrients()
 
         FlowPhase().execute(ws, ws, TurnContext(tick=0, weather_seed=0))
@@ -78,21 +78,21 @@ class TestFlowBehavior:
         grid = HexGrid(5, 5)
         ws = WorldState(grid)
         center = Axial(2, 2)
-        ci = ws._idx(center)
+        ci = ws._col_idx(center.q, center.r)
         ws.moisture[ci] = 100.0
         ws.slope_q[ci] = 1.0
 
         FlowPhase().execute(ws, ws, TurnContext(tick=0, weather_seed=0))
 
-        assert ws.moisture_at(center) < 100.0
-        assert ws.moisture_at(Axial(3, 2)) > 0.0 or ws.moisture_at(Axial(3, 1)) > 0.0
+        assert ws.moisture_at(HexCell(2, 2, 0)) < 100.0
+        assert ws.moisture_at(HexCell(3, 2, 0)) > 0.0 or ws.moisture_at(HexCell(3, 1, 0)) > 0.0
 
     def test_no_negative_moisture(self):
         grid = HexGrid(5, 5)
         ws = WorldState(grid)
         ws.moisture[:] = 0.1
         for h in grid:
-            ws.slope_q[ws._idx(h)] = 1.0
+            ws.slope_q[ws._col_idx(h.q, h.r)] = 1.0
 
         for _ in range(10):
             FlowPhase().execute(ws, ws, TurnContext(tick=0, weather_seed=0))
