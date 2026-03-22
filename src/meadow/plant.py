@@ -1,26 +1,69 @@
-﻿"""Plant domain: identity, traits, and population registry.
+"""Plant domain: identity, traits, body plan, and population registry.
 
 Growth forms (grass, taproot, woody) are parameter-driven, not subclass-driven.
-Body plan (root/leaf/stem hex sets) will be added in Phase 3.
+Leaf shape is encoded via number_of_lobes, lobe_aspect_ratio, and lobe_length
+so that grass (1 narrow lobe) and maple (5-7 wide lobes) use the same model.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+from meadow.hex import Axial
+
+_LOBE_SHAPE_FACTOR: float = 0.7
+
 
 @dataclass
 class TraitBundle:
-    """Numeric traits with mean/variance — placeholder for Phase 1.
+    """Numeric traits governing plant behavior. All floats for continuous mutation."""
 
-    Will hold allocation weights, mutation rates, etc.
-    """
+    # Leaf geometry
+    number_of_lobes: float = 1.0
+    lobe_aspect_ratio: float = 10.0
+    lobe_length: float = 12.0
+
+    # Root
+    root_reach: float = 0.3
+
+    # Allocation weights (relative; normalized at use)
+    alloc_root: float = 0.25
+    alloc_leaf: float = 0.25
+    alloc_stem: float = 0.25
+    alloc_reproduce: float = 0.25
+
+    @property
+    def effective_leaf_area(self) -> float:
+        """Approximate single-leaf area in cm^2 from lobe geometry."""
+        if self.number_of_lobes <= 0 or self.lobe_length <= 0:
+            return 0.0
+        lobe_width = self.lobe_length / max(self.lobe_aspect_ratio, 0.01)
+        return self.number_of_lobes * self.lobe_length * lobe_width * _LOBE_SHAPE_FACTOR
+
+
+@dataclass
+class PlantBody:
+    """Spatial footprint of a plant on the hex grid."""
+
+    home: Axial
+    root_hexes: set[Axial] | None = None
+    leaf_hexes: set[Axial] | None = None
+
+    def __post_init__(self):
+        if self.root_hexes is None:
+            self.root_hexes = {self.home}
+        if self.leaf_hexes is None:
+            self.leaf_hexes = {self.home}
 
 
 @dataclass
 class Plant:
     id: int
     traits: TraitBundle = field(default_factory=TraitBundle)
+    body: PlantBody | None = None
+    moisture_reserve: float = 0.0
+    nutrient_reserve: float = 0.0
+    cellulose: float = 0.0
 
 
 class PlantPopulation:
@@ -30,8 +73,13 @@ class PlantPopulation:
         self._plants: dict[int, Plant] = {}
         self._next_id: int = 0
 
-    def register(self, traits: TraitBundle | None = None) -> Plant:
-        plant = Plant(id=self._next_id, traits=traits or TraitBundle())
+    def register(
+        self,
+        traits: TraitBundle | None = None,
+        home: Axial | None = None,
+    ) -> Plant:
+        body = PlantBody(home=home) if home is not None else None
+        plant = Plant(id=self._next_id, traits=traits or TraitBundle(), body=body)
         self._plants[self._next_id] = plant
         self._next_id += 1
         return plant
