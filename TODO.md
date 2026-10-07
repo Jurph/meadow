@@ -21,6 +21,9 @@ Build a plant-evolution terrarium on a hex grid:
 - plant traits, reserves, photosynthesis, and cellulose allocation
 - segment-graph root and stem growth guided by gravitropism and hydrotropism
 - deterministic phase and population ordering with integration coverage
+- production `Simulation` composition root with an owned tick counter
+- immutable, versioned renderer/save snapshots
+- `meadow simulate` CLI output and a snapshot-driven Godot renderer
 
 ## Known constraints
 
@@ -28,25 +31,26 @@ Build a plant-evolution terrarium on a hex grid:
 - depletion is a no-op
 - occupancy and crowding are stored but not enforced during growth
 - reproduction, mutation, death, decay, and canopy occlusion are not implemented
-- no production composition root, snapshot format, save/replay path, or Python-to-Godot bridge
+- Python-to-Godot transport is a generated JSON file, not a live process connection
+- snapshots are write-only; save loading and replay are not implemented
 
 ## UI direction
 
 - Godot 4.6 is the rendering and interaction stack
 - Python remains authoritative for simulation state
-- the current Godot scene is a static 7×7 hex preview
-- development builds should expose a debug-heavy inspector before visual polish
+- the Godot scene renders simulated tile fields and plant segments from a versioned snapshot
+- the current debug overlay exposes tick, population, segment, and reserve state
 - the world should read like a tilted or isometric hillside with plants growing upward
 
 ## Next implementation steps
 
-1. Add a production `Simulation` composition root that owns the world, population, phases, and
-   tick counter.
-2. Define a versioned, immutable world snapshot for renderer and save/replay consumers.
-3. Make the CLI run ticks and emit a snapshot.
-4. Replace the Godot demo grid with rendering driven by a Python-produced snapshot.
-5. Add occupancy and crowding rules before allowing unrestricted multi-plant growth.
-6. Complete the lifecycle loop: reproduction, mutation, death, depletion, and decay.
+- [x] Add a production `Simulation` composition root.
+- [x] Define a versioned, immutable world snapshot.
+- [x] Make the CLI run ticks and emit a snapshot.
+- [x] Render Python-produced tile and plant state in Godot.
+- [ ] Add occupancy and crowding rules before allowing unrestricted multi-plant growth.
+- [ ] Complete the lifecycle loop: reproduction, mutation, death, depletion, and decay.
+- [ ] Add live snapshot regeneration/reload only after the file seam remains stable.
 
 ## Repo setup
 

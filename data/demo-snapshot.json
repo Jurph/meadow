@@ -1,0 +1,856 @@
+{
+  "plants": [
+    {
+      "cellulose": 0.11999999999999966,
+      "home": {
+        "q": 3,
+        "r": 3,
+        "z": 0
+      },
+      "id": 0,
+      "moisture_reserve": 216.72495450325957,
+      "nutrient_reserve": 230.10862776376368,
+      "segments": [
+        {
+          "accumulated_length": 1.0,
+          "diameter": 1.0,
+          "end": {
+            "q": 3,
+            "r": 3,
+            "z": -1
+          },
+          "id": 0,
+          "order": 0,
+          "parent_id": -1,
+          "segment_type": "ROOT",
+          "start": {
+            "q": 3,
+            "r": 3,
+            "z": 0
+          }
+        },
+        {
+          "accumulated_length": 1.0,
+          "diameter": 1.0,
+          "end": {
+            "q": 3,
+            "r": 3,
+            "z": 1
+          },
+          "id": 1,
+          "order": 0,
+          "parent_id": -1,
+          "segment_type": "STEM",
+          "start": {
+            "q": 3,
+            "r": 3,
+            "z": 0
+          }
+        },
+        {
+          "accumulated_length": 2.0,
+          "diameter": 1.0,
+          "end": {
+            "q": 3,
+            "r": 3,
+            "z": -2
+          },
+          "id": 2,
+          "order": 0,
+          "parent_id": 0,
+          "segment_type": "ROOT",
+          "start": {
+            "q": 3,
+            "r": 3,
+            "z": -1
+          }
+        },
+        {
+          "accumulated_length": 1.0,
+          "diameter": 1.0,
+          "end": {
+            "q": 4,
+            "r": 3,
+            "z": -1
+          },
+          "id": 3,
+          "order": 1,
+          "parent_id": 2,
+          "segment_type": "ROOT",
+          "start": {
+            "q": 3,
+            "r": 3,
+            "z": -1
+          }
+        },
+        {
+          "accumulated_length": 2.0,
+          "diameter": 1.0,
+          "end": {
+            "q": 3,
+            "r": 3,
+            "z": 2
+          },
+          "id": 4,
+          "order": 0,
+          "parent_id": 1,
+          "segment_type": "STEM",
+          "start": {
+            "q": 3,
+            "r": 3,
+            "z": 1
+          }
+        },
+        {
+          "accumulated_length": 1.0,
+          "diameter": 1.0,
+          "end": {
+            "q": 4,
+            "r": 3,
+            "z": 1
+          },
+          "id": 5,
+          "order": 1,
+          "parent_id": 4,
+          "segment_type": "STEM",
+          "start": {
+            "q": 3,
+            "r": 3,
+            "z": 1
+          }
+        },
+        {
+          "accumulated_length": 3.0,
+          "diameter": 1.0,
+          "end": {
+            "q": 3,
+            "r": 3,
+            "z": -3
+          },
+          "id": 6,
+          "order": 0,
+          "parent_id": 2,
+          "segment_type": "ROOT",
+          "start": {
+            "q": 3,
+            "r": 3,
+            "z": -2
+          }
+        },
+        {
+          "accumulated_length": 3.0,
+          "diameter": 1.0,
+          "end": {
+            "q": 3,
+            "r": 3,
+            "z": 3
+          },
+          "id": 7,
+          "order": 0,
+          "parent_id": 4,
+          "segment_type": "STEM",
+          "start": {
+            "q": 3,
+            "r": 3,
+            "z": 2
+          }
+        },
+        {
+          "accumulated_length": 2.0,
+          "diameter": 1.0,
+          "end": {
+            "q": 4,
+            "r": 3,
+            "z": -2
+          },
+          "id": 8,
+          "order": 1,
+          "parent_id": 3,
+          "segment_type": "ROOT",
+          "start": {
+            "q": 4,
+            "r": 3,
+            "z": -1
+          }
+        },
+        {
+          "accumulated_length": 1.0,
+          "diameter": 1.0,
+          "end": {
+            "q": 5,
+            "r": 3,
+            "z": -1
+          },
+          "id": 9,
+          "order": 2,
+          "parent_id": 8,
+          "segment_type": "ROOT",
+          "start": {
+            "q": 4,
+            "r": 3,
+            "z": -1
+          }
+        },
+        {
+          "accumulated_length": 2.0,
+          "diameter": 1.0,
+          "end": {
+            "q": 4,
+            "r": 3,
+            "z": 2
+          },
+          "id": 10,
+          "order": 1,
+          "parent_id": 5,
+          "segment_type": "STEM",
+          "start": {
+            "q": 4,
+            "r": 3,
+            "z": 1
+          }
+        },
+        {
+          "accumulated_length": 1.0,
+          "diameter": 1.0,
+          "end": {
+            "q": 5,
+            "r": 3,
+            "z": 1
+          },
+          "id": 11,
+          "order": 2,
+          "parent_id": 10,
+          "segment_type": "STEM",
+          "start": {
+            "q": 4,
+            "r": 3,
+            "z": 1
+          }
+        },
+        {
+          "accumulated_length": 4.0,
+          "diameter": 1.0,
+          "end": {
+            "q": 3,
+            "r": 3,
+            "z": -4
+          },
+          "id": 12,
+          "order": 0,
+          "parent_id": 6,
+          "segment_type": "ROOT",
+          "start": {
+            "q": 3,
+            "r": 3,
+            "z": -3
+          }
+        },
+        {
+          "accumulated_length": 1.0,
+          "diameter": 1.0,
+          "end": {
+            "q": 4,
+            "r": 3,
+            "z": -3
+          },
+          "id": 13,
+          "order": 1,
+          "parent_id": 12,
+          "segment_type": "ROOT",
+          "start": {
+            "q": 3,
+            "r": 3,
+            "z": -3
+          }
+        },
+        {
+          "accumulated_length": 4.0,
+          "diameter": 1.0,
+          "end": {
+            "q": 3,
+            "r": 3,
+            "z": 4
+          },
+          "id": 14,
+          "order": 0,
+          "parent_id": 7,
+          "segment_type": "STEM",
+          "start": {
+            "q": 3,
+            "r": 3,
+            "z": 3
+          }
+        }
+      ],
+      "traits": {
+        "alloc_leaf": 0.25,
+        "alloc_reproduce": 0.0,
+        "alloc_root": 0.5,
+        "alloc_stem": 0.25,
+        "apical_length": 1.0,
+        "basal_length": 1.0,
+        "branch_probability": 0.5,
+        "branch_spacing": 0.8,
+        "cellulose_per_segment": 1.0,
+        "gravitropism_weight": 1.0,
+        "gsa_root": 60.0,
+        "hydrotropism_weight": 0.0,
+        "lobe_aspect_ratio": 1.0,
+        "lobe_length": 12.0,
+        "max_root_length": 15.0,
+        "number_of_lobes": 1.0,
+        "root_reach": 0.3
+      }
+    }
+  ],
+  "schema_version": 1,
+  "sim_api_version": 1,
+  "tick": 10,
+  "tiles": [
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 0,
+      "r": 0,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 0,
+      "r": 1,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 0,
+      "r": 2,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 0,
+      "r": 3,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 0,
+      "r": 4,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 0,
+      "r": 5,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 0,
+      "r": 6,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 1,
+      "r": 0,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 1,
+      "r": 1,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 1,
+      "r": 2,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 1,
+      "r": 3,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 1,
+      "r": 4,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 1,
+      "r": 5,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 1,
+      "r": 6,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 2,
+      "r": 0,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 2,
+      "r": 1,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 2,
+      "r": 2,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 2,
+      "r": 3,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 2,
+      "r": 4,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 2,
+      "r": 5,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 2,
+      "r": 6,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 3,
+      "r": 0,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 3,
+      "r": 1,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 3,
+      "r": 2,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 3.19091199674044,
+      "nutrients": 0.006571236236353429,
+      "occupant_id": 0,
+      "q": 3,
+      "r": 3,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 3,
+      "r": 4,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 3,
+      "r": 5,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 3,
+      "r": 6,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 4,
+      "r": 0,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 4,
+      "r": 1,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 4,
+      "r": 2,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 13.864133500000001,
+      "nutrients": 5.764800999999999,
+      "occupant_id": null,
+      "q": 4,
+      "r": 3,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 4,
+      "r": 4,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 4,
+      "r": 5,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 4,
+      "r": 6,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 5,
+      "r": 0,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 5,
+      "r": 1,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 5,
+      "r": 2,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 51.1,
+      "nutrients": 49.0,
+      "occupant_id": null,
+      "q": 5,
+      "r": 3,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 5,
+      "r": 4,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 5,
+      "r": 5,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 5,
+      "r": 6,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 6,
+      "r": 0,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 6,
+      "r": 1,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 6,
+      "r": 2,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 6,
+      "r": 3,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 6,
+      "r": 4,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 6,
+      "r": 5,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    },
+    {
+      "drainage": 1.0,
+      "light": 1.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
+      "occupant_id": null,
+      "q": 6,
+      "r": 6,
+      "slope_q": 0.0,
+      "slope_r": 0.0
+    }
+  ],
+  "world": {
+    "height": 7,
+    "max_z": 50,
+    "min_z": -20,
+    "width": 7
+  }
+}

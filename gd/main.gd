@@ -1,13 +1,28 @@
 extends Node3D
-## Meadow entry: sky, light, camera, and a small hex patch preview.
+## Meadow entry: load a Python snapshot, render it, and show diagnostics.
 
-const GRID_SIZE := 7
-const HEX_SIZE := 0.55
+const SNAPSHOT_PATH := "res://data/demo-snapshot.json"
+const EXPECTED_SCHEMA_VERSION := 1
+const EXPECTED_SIM_API_VERSION := 1
+const SnapshotRenderer = preload("res://gd/snapshot_renderer.gd")
+const SnapshotLoader = preload("res://gd/snapshot_loader.gd")
 
 
 func _ready() -> void:
 	_setup_sky()
-	_spawn_demo_hexes()
+	var snapshot := SnapshotLoader.load_snapshot(
+		SNAPSHOT_PATH,
+		EXPECTED_SCHEMA_VERSION,
+		EXPECTED_SIM_API_VERSION,
+	)
+	if snapshot.is_empty():
+		return
+
+	var renderer := SnapshotRenderer.new()
+	renderer.name = "SnapshotRenderer"
+	add_child(renderer)
+	renderer.render_snapshot(snapshot)
+	_add_debug_overlay(snapshot)
 
 
 func _setup_sky() -> void:
@@ -26,41 +41,46 @@ func _setup_sky() -> void:
 	env.ambient_light_source = Environment.AMBIENT_SOURCE_SKY
 	env.ambient_light_energy = 0.35
 
-	var we := WorldEnvironment.new()
-	we.environment = env
-	add_child(we)
+	var world_environment := WorldEnvironment.new()
+	world_environment.environment = env
+	add_child(world_environment)
 
 
-func _spawn_demo_hexes() -> void:
-	var root := Node3D.new()
-	root.name = "HexPreview"
-	add_child(root)
+func _add_debug_overlay(snapshot: Dictionary) -> void:
+	var plants: Array = snapshot.get("plants", [])
+	var segment_count := 0
+	for plant_value in plants:
+		var plant := plant_value as Dictionary
+		var segments: Array = plant.get("segments", [])
+		segment_count += segments.size()
 
-	var grass := Color(0.22, 0.48, 0.2)
-	var grass_dark := Color(0.14, 0.32, 0.12)
+	var reserve_text := "No plants"
+	if not plants.is_empty():
+		var first_plant := plants[0] as Dictionary
+		reserve_text = "Plant 0 — water %.2f  nutrients %.2f  cellulose %.2f" % [
+			float(first_plant.get("moisture_reserve", 0.0)),
+			float(first_plant.get("nutrient_reserve", 0.0)),
+			float(first_plant.get("cellulose", 0.0)),
+		]
 
-	for q in range(GRID_SIZE):
-		for r in range(GRID_SIZE):
-			var parity := (q + r) & 1
-			var mat := StandardMaterial3D.new()
-			mat.albedo_color = grass if parity == 0 else grass_dark
-			mat.roughness = 0.92
+	var layer := CanvasLayer.new()
+	layer.name = "DebugOverlay"
+	add_child(layer)
 
-			var mesh_inst := MeshInstance3D.new()
-			var cyl := CylinderMesh.new()
-			cyl.top_radius = HEX_SIZE * 0.92
-			cyl.bottom_radius = HEX_SIZE * 0.92
-			cyl.height = 0.08
-			cyl.radial_segments = 6
-			cyl.rings = 1
-			mesh_inst.mesh = cyl
-			mesh_inst.set_surface_override_material(0, mat)
-			mesh_inst.position = axial_to_world_xz(q, r)
-			root.add_child(mesh_inst)
+	var panel := ColorRect.new()
+	panel.position = Vector2(18.0, 18.0)
+	panel.size = Vector2(430.0, 104.0)
+	panel.color = Color(0.03, 0.06, 0.04, 0.82)
+	layer.add_child(panel)
 
-
-static func axial_to_world_xz(q: int, r: int) -> Vector3:
-	var s := float(HEX_SIZE)
-	var x := s * (sqrt(3.0) * float(q) + sqrt(3.0) * 0.5 * float(r))
-	var z := s * (1.5 * float(r))
-	return Vector3(x, 0.0, z)
+	var label := Label.new()
+	label.position = Vector2(14.0, 10.0)
+	label.add_theme_font_size_override("font_size", 18)
+	label.add_theme_color_override("font_color", Color(0.88, 0.94, 0.82))
+	label.text = "Meadow — Python snapshot\nTick %d  |  Plants %d  |  Segments %d\n%s" % [
+		int(snapshot.get("tick", 0)),
+		plants.size(),
+		segment_count,
+		reserve_text,
+	]
+	panel.add_child(label)
