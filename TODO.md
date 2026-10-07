@@ -60,7 +60,7 @@ Build a plant-evolution terrarium on a hex grid:
 ## Repo chores to check after push
 
 - [ ] confirm CircleCI runs on `main`
-- [ ] confirm the label-sync workflow creates or updates the starter labels
+- [x] confirm the label-sync workflow creates or updates the starter labels
 - [ ] add `CODECOV_TOKEN` if Codecov should be active immediately
 - [ ] verify README badges resolve
 
