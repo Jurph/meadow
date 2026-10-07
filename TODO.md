@@ -1,67 +1,73 @@
 # TODO
 
-`meadow` is scaffolding right now. This file is the working note for the next developers who show
-up and need to understand where the project is headed.
+`meadow` has a tested Python simulation core and an early Godot client. This file is the restart
+map for turning those pieces into one end-to-end terrarium.
 
 ## Vision
 
-Build a plant-evolution terrarium on a hex grid.
+Build a plant-evolution terrarium on a hex grid:
 
-The current mental model:
 - plants are the main agents
-- the environment exists to wash over them with pressure
-- success at gathering resources should let plants grow, reproduce, and shift their lineage traits
-- mutations should move trait ranges instead of only flipping binary flags
+- the environment washes over them with pressure
+- success at gathering resources lets plants grow, reproduce, and shift lineage traits
+- mutations move continuous trait ranges instead of only flipping binary flags
+- dead organisms return resources to the world and affect later generations
 
-## Current simulation picture
+## Implemented simulation core
 
-- one plant is anchored in each hex in the early revisions
-- plants can extend roots into neighboring hexes and compete there for water and nutrients
-- each plant gets light in its own hex, modified by the height of nearby plants
-- reproduction should happen automatically once a plant crosses the right threshold
-- dead plants should return nutrients to the soil over time through a decay state or ghost layer
+- 3D `HexCell(q, r, z)` coordinates over a bounded axial grid
+- NumPy-backed moisture, nutrients, light, drainage, slope, and occupancy fields
+- weather, slope-driven flow, uniform light, resource uptake, and growth phases
+- plant traits, reserves, photosynthesis, and cellulose allocation
+- segment-graph root and stem growth guided by gravitropism and hydrotropism
+- deterministic phase and population ordering with integration coverage
 
-## World pressures we expect to model
+## Known constraints
 
-- global or mostly-global changes in light, water, and nutrient availability
-- terrain slope so rain events move water downhill
-- prevailing winds as part of how stress distributes across the meadow
-- nutrient injections from decay, waste, spoor, or carcass-like events
+- world fields are still 2D; cells at different `z` levels read the same column resources
+- depletion is a no-op
+- occupancy and crowding are stored but not enforced during growth
+- reproduction, mutation, death, decay, and canopy occlusion are not implemented
+- no production composition root, snapshot format, save/replay path, or Python-to-Godot bridge
 
 ## UI direction
 
-- Panda3D is the chosen rendering stack
-- the long-term view is 3D, not flat 2D
+- Godot 4.6 is the rendering and interaction stack
+- Python remains authoritative for simulation state
+- the current Godot scene is a static 7×7 hex preview
+- development builds should expose a debug-heavy inspector before visual polish
 - the world should read like a tilted or isometric hillside with plants growing upward
-- development builds should expose a debug-heavy inspector before we simplify it later
 
-## First useful implementation steps
+## Next implementation steps
 
-- replace the placeholder CLI with a Panda3D app bootstrap
-- decide how the hex world, plant agents, and decay layer are represented in code
-- define the first environmental controls and how they map to simulation state
-- get a basic hillside scene on screen before chasing visual polish
-- keep the first plant model primitive if needed; correctness beats beauty here
+1. Add a production `Simulation` composition root that owns the world, population, phases, and
+   tick counter.
+2. Define a versioned, immutable world snapshot for renderer and save/replay consumers.
+3. Make the CLI run ticks and emit a snapshot.
+4. Replace the Godot demo grid with rendering driven by a Python-produced snapshot.
+5. Add occupancy and crowding rules before allowing unrestricted multi-plant growth.
+6. Complete the lifecycle loop: reproduction, mutation, death, depletion, and decay.
 
-## Repo setup that should already be done
+## Repo setup
 
-- [x] project scaffold copied from the default template
-- [x] public-facing README written for `meadow`
-- [x] CI workflow present
-- [x] Codecov upload hooks present
-- [x] issue templates present
-- [x] starter label definitions present
+- [x] Python project setup and local development wrappers
+- [x] CircleCI checks and Codecov upload hooks
+- [x] issue templates and starter label definitions
+- [x] simulation architecture and phase plans
+- [x] simulation phases through graph-based plant growth
+- [x] initial Godot project, scene, and visual references
 
-## Repo chores to check after the first push
+## Repo chores to check after push
 
 - [ ] confirm CircleCI runs on `main`
-- [ ] confirm the label-sync workflow creates the starter labels
+- [ ] confirm the label-sync workflow creates or updates the starter labels
 - [ ] add `CODECOV_TOKEN` if Codecov should be active immediately
-- [ ] verify README badges resolve after the first CI run
+- [ ] verify README badges resolve
 
 ## Guardrails
 
-- keep the simulation core testable without Panda3D
-- let rendering observe sim state rather than own it
-- avoid a god-file for the world update loop
-- keep ecology rules and presentation concerns separate from the start
+- keep the Python simulation core testable without Godot
+- let rendering consume stable snapshots rather than own simulation state
+- keep ecology rules and presentation concerns separate
+- avoid duplicate world rules in Python and GDScript
+- prefer one observable end-to-end slice over another isolated subsystem

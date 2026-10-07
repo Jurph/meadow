@@ -1,5 +1,4 @@
-﻿"""Tests for tropism scoring functions."""
-
+"""Tests for tropism scoring functions."""
 
 from meadow.hex import Axial, HexCell
 from meadow.tropisms import rank_growth_candidates, score_gravitropism, score_hydrotropism
@@ -84,8 +83,12 @@ class TestRankCandidates:
         view = FakeView({wet_lateral: 100.0, dry_down: 0.0})
 
         ranked = rank_growth_candidates(
-            current, [dry_down, wet_lateral], view,
-            is_root=True, gravity_weight=0.1, hydro_weight=1.0,
+            current,
+            [dry_down, wet_lateral],
+            view,
+            is_root=True,
+            gravity_weight=0.1,
+            hydro_weight=1.0,
         )
         assert ranked[0][0] == wet_lateral
 

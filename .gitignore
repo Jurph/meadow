@@ -37,3 +37,18 @@ Growth-Is-Not-Optional-Jurphs-SW-Eng-Journey.md
 
 # Claude Code
 .claude/
+
+# Local brainstorming artifacts
+.superpowers/
+
+# Godot (project.godot at repo root; res:// is the whole tree)
+.godot/
+**/*.import
+
+# Local research sources and third-party visual references
+# Keep these available for design work without redistributing them from this public repository.
+docs/R_PdR_03.pdf
+docs/fpls-14-1299208.pdf
+docs/isal_a_00718.pdf
+docs/visual references/*
+!docs/visual references/README.md

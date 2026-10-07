@@ -173,9 +173,7 @@ class GrowthPhase:
     def name(self) -> PhaseName:
         return PhaseName.GROWTH
 
-    def execute(
-        self, view: WorldView, mutator: WorldMutator, ctx: TurnContext
-    ) -> PhaseResult:
+    def execute(self, view: WorldView, mutator: WorldMutator, ctx: TurnContext) -> PhaseResult:
         rng = random.Random(ctx.weather_seed + ctx.tick)
         total_cellulose = 0.0
         total_spent = 0.0

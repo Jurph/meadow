@@ -1,4 +1,4 @@
-﻿"""Weather phase: generates moisture inputs each tick.
+"""Weather phase: generates moisture inputs each tick.
 
 v1 simplification: uniform rainfall across the entire grid.
 """
@@ -20,9 +20,7 @@ class WeatherPhase:
     def name(self) -> PhaseName:
         return PhaseName.WEATHER
 
-    def execute(
-        self, view: WorldView, mutator: WorldMutator, ctx: TurnContext
-    ) -> PhaseResult:
+    def execute(self, view: WorldView, mutator: WorldMutator, ctx: TurnContext) -> PhaseResult:
         if not isinstance(mutator, WorldState):
             raise TypeError("WeatherPhase requires a WorldState mutator for array access")
         mutator.moisture += self._rainfall

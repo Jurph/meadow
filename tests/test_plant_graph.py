@@ -1,4 +1,4 @@
-﻿"""Tests for PlantGraph and Segment types."""
+"""Tests for PlantGraph and Segment types."""
 
 from meadow.hex import HexCell
 from meadow.plant_graph import PlantGraph, SegmentType

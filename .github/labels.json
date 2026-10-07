@@ -37,7 +37,7 @@
   {
     "name": "area: rendering",
     "color": "bfd4f2",
-    "description": "Panda3D scene, camera, terrain, and visual rendering."
+    "description": "Godot scenes, camera, terrain, and visual rendering."
   },
   {
     "name": "area: ui",

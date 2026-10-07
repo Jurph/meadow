@@ -12,29 +12,40 @@ plants in interesting ways and let evolution do visible work.
 
 ## Status
 
-This repository is currently scaffolding.
+The Python simulation core is implemented through early physical plant growth:
 
-The janitorial setup is in place:
-- Python project structure and local dev tooling
-- CI checks and Codecov upload hooks
-- issue templates and starter issue labels
-- a public project README and a dev-facing `TODO.md`
+- 3D axial coordinates describe surface, root, and canopy cells
+- NumPy-backed world fields track moisture, nutrients, light, drainage, slope, and occupancy
+- an ordered six-phase tick runs weather, flow, light, uptake, depletion, and growth
+- parameterized plant traits drive photosynthesis, cellulose allocation, tropisms, and branching
+- plant bodies grow as segment graphs rather than fixed tile markers
 
-The simulation, Panda3D renderer, and terrarium UI are still ahead of us.
+The depletion phase is still a placeholder, and reproduction, mutation, death, decay, crowding,
+and canopy occlusion remain ahead. The simulation also lacks a production composition root,
+snapshots, and save/replay support.
 
-## Planned first experience
+A Godot 4.6 client now provides a small 3D hex-grid preview. It is not yet connected to Python
+simulation state; establishing that boundary is the next integration milestone.
 
-The first real milestone is a primitive but usable GUI terrarium:
-- a hex-grid world on a tilted hillside
-- one plant anchored per hex
-- light, water, and nutrients as the first live environmental pressures
-- room to add pests and pollinators later
+## Planned first integrated experience
 
-If you want the working notes instead of the public pitch, start with `TODO.md`.
+The next milestone is a primitive but usable debug terrarium:
+
+- a Python-simulated hex-grid world on a tilted hillside
+- Godot rendering the authoritative Python world snapshot
+- one plant anchored per hex, with visible root and stem growth
+- light, water, and nutrients exposed through a debug-heavy inspector
+- room to add seed placement, pests, pollinators, and plant design controls later
+
+For the working roadmap, start with `TODO.md`.
 
 ## Development setup
 
-Dependencies for this project are defined in `pyproject.toml`.
+The simulation core requires Python 3.11 or newer. Dependencies are defined in
+`pyproject.toml`.
+
+The visual client requires Godot 4.6 or newer. Open `project.godot` to run the current static
+hex-grid preview.
 
 If you are using `uv`:
 

@@ -1,4 +1,4 @@
-﻿"""Phase 4 integration: plant growth over multiple ticks.
+"""Phase 4 integration: plant growth over multiple ticks.
 
 Key behaviors tested:
 - Root cells expand over multiple ticks
@@ -23,22 +23,22 @@ from meadow.world_state import WorldState
 
 # Growth spends from per-pool allocation; default 0.25 root share needs cellulose >= 4
 # before the root pool reaches cellulose_per_segment (1.0). Bias allocation for these tests.
-_ROOT_GROWTH_ALLOC = dict(
-    alloc_root=1.0, alloc_leaf=0.0, alloc_stem=0.0, alloc_reproduce=0.0
-)
+_ROOT_GROWTH_ALLOC = dict(alloc_root=1.0, alloc_leaf=0.0, alloc_stem=0.0, alloc_reproduce=0.0)
 
 
 def _build_phase4_pipeline(
     pop: PlantPopulation, grid: HexGrid, rainfall: float = 5.0
 ) -> TurnPipeline:
-    return TurnPipeline({
-        PhaseName.WEATHER: WeatherPhase(rainfall_per_tick=rainfall),
-        PhaseName.FLOW: FlowPhase(),
-        PhaseName.LIGHT: LightPhase(base_sunlight=1.0),
-        PhaseName.UPTAKE: UptakePhase(pop),
-        PhaseName.DEPLETION: NoOpPhase(PhaseName.DEPLETION),
-        PhaseName.GROWTH: GrowthPhase(pop, grid),
-    })
+    return TurnPipeline(
+        {
+            PhaseName.WEATHER: WeatherPhase(rainfall_per_tick=rainfall),
+            PhaseName.FLOW: FlowPhase(),
+            PhaseName.LIGHT: LightPhase(base_sunlight=1.0),
+            PhaseName.UPTAKE: UptakePhase(pop),
+            PhaseName.DEPLETION: NoOpPhase(PhaseName.DEPLETION),
+            PhaseName.GROWTH: GrowthPhase(pop, grid),
+        }
+    )
 
 
 def _seed_nutrients(ws: WorldState, amount: float = 50.0):
@@ -52,9 +52,7 @@ class TestPhase4Integration:
         grid = HexGrid(10, 10)
         ws = WorldState(grid)
         pop = PlantPopulation()
-        plant = pop.register(
-            home=HexCell(5, 5, 0), traits=TraitBundle(**_ROOT_GROWTH_ALLOC)
-        )
+        plant = pop.register(home=HexCell(5, 5, 0), traits=TraitBundle(**_ROOT_GROWTH_ALLOC))
         pipeline = _build_phase4_pipeline(pop, grid, rainfall=10.0)
         _seed_nutrients(ws, 100.0)
 
@@ -68,9 +66,7 @@ class TestPhase4Integration:
         grid = HexGrid(10, 10)
         ws = WorldState(grid)
         pop = PlantPopulation()
-        traits = TraitBundle(
-            gravitropism_weight=2.0, hydrotropism_weight=0.0, **_ROOT_GROWTH_ALLOC
-        )
+        traits = TraitBundle(gravitropism_weight=2.0, hydrotropism_weight=0.0, **_ROOT_GROWTH_ALLOC)
         plant = pop.register(home=HexCell(5, 5, 0), traits=traits)
         pipeline = _build_phase4_pipeline(pop, grid, rainfall=10.0)
         _seed_nutrients(ws, 100.0)
@@ -85,9 +81,7 @@ class TestPhase4Integration:
         grid = HexGrid(10, 10)
         ws = WorldState(grid)
         pop = PlantPopulation()
-        traits = TraitBundle(
-            gravitropism_weight=0.0, hydrotropism_weight=2.0, **_ROOT_GROWTH_ALLOC
-        )
+        traits = TraitBundle(gravitropism_weight=0.0, hydrotropism_weight=2.0, **_ROOT_GROWTH_ALLOC)
         plant = pop.register(home=HexCell(5, 5, 0), traits=traits)
         _seed_nutrients(ws, 50.0)
 
@@ -122,9 +116,7 @@ class TestPhase4Integration:
         for tick in range(5):
             pipeline.run_tick(ws, ws, TurnContext(tick=tick, weather_seed=42))
 
-        root_tips = [
-            t for t in plant.body.graph.tips if t.segment_type == SegmentType.ROOT
-        ]
+        root_tips = [t for t in plant.body.graph.tips if t.segment_type == SegmentType.ROOT]
         assert len(root_tips) > 1, "Branching should create additional root tips"
 
     def test_full_tick_completes_with_6_results(self):
@@ -141,15 +133,11 @@ class TestPhase4Integration:
         grid = HexGrid(10, 10)
         ws = WorldState(grid)
         pop = PlantPopulation()
-        plant = pop.register(
-            home=HexCell(5, 5, 0), traits=TraitBundle(**_ROOT_GROWTH_ALLOC)
-        )
+        plant = pop.register(home=HexCell(5, 5, 0), traits=TraitBundle(**_ROOT_GROWTH_ALLOC))
         pipeline = _build_phase4_pipeline(pop, grid, rainfall=10.0)
         _seed_nutrients(ws, 100.0)
 
         for tick in range(10):
             pipeline.run_tick(ws, ws, TurnContext(tick=tick, weather_seed=42))
 
-        assert len(plant.body.graph.segments) > 0, (
-            "Graph should have segments after growth"
-        )
+        assert len(plant.body.graph.segments) > 0, "Graph should have segments after growth"

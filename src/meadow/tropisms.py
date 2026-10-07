@@ -1,4 +1,4 @@
-﻿"""Tropism scoring: pure functions for growth direction preference.
+"""Tropism scoring: pure functions for growth direction preference.
 
 Roots and stems choose which neighboring cell to grow into based on
 weighted tropism scores. Inspired by the weighted-sum-of-tropisms

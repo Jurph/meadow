@@ -22,14 +22,16 @@ from meadow.world_state import WorldState
 def _build_phase3_pipeline(
     pop: PlantPopulation, grid: HexGrid, rainfall: float = 2.0
 ) -> TurnPipeline:
-    return TurnPipeline({
-        PhaseName.WEATHER: WeatherPhase(rainfall_per_tick=rainfall),
-        PhaseName.FLOW: FlowPhase(),
-        PhaseName.LIGHT: LightPhase(base_sunlight=1.0),
-        PhaseName.UPTAKE: UptakePhase(pop),
-        PhaseName.DEPLETION: NoOpPhase(PhaseName.DEPLETION),
-        PhaseName.GROWTH: GrowthPhase(pop, grid),
-    })
+    return TurnPipeline(
+        {
+            PhaseName.WEATHER: WeatherPhase(rainfall_per_tick=rainfall),
+            PhaseName.FLOW: FlowPhase(),
+            PhaseName.LIGHT: LightPhase(base_sunlight=1.0),
+            PhaseName.UPTAKE: UptakePhase(pop),
+            PhaseName.DEPLETION: NoOpPhase(PhaseName.DEPLETION),
+            PhaseName.GROWTH: GrowthPhase(pop, grid),
+        }
+    )
 
 
 def _seed_uniform_nutrients(ws: WorldState, amount: float) -> None:
@@ -72,7 +74,9 @@ class TestPhase3Integration:
         grass = pop_grass.register(
             home=HexCell(2, 2, 0),
             traits=TraitBundle(
-                number_of_lobes=1.0, lobe_aspect_ratio=20.0, lobe_length=15.0,
+                number_of_lobes=1.0,
+                lobe_aspect_ratio=20.0,
+                lobe_length=15.0,
                 root_reach=0.5,
             ),
         )
@@ -85,7 +89,9 @@ class TestPhase3Integration:
         maple = pop_maple.register(
             home=HexCell(2, 2, 0),
             traits=TraitBundle(
-                number_of_lobes=5.0, lobe_aspect_ratio=1.5, lobe_length=8.0,
+                number_of_lobes=5.0,
+                lobe_aspect_ratio=1.5,
+                lobe_length=8.0,
                 root_reach=0.5,
             ),
         )

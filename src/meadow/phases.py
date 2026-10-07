@@ -1,4 +1,4 @@
-﻿"""Phase contracts and ordering for the turn pipeline.
+"""Phase contracts and ordering for the turn pipeline.
 
 Each named phase executes once per tick in PHASE_ORDER sequence.
 """
@@ -35,9 +35,7 @@ class Phase(Protocol):
     @property
     def name(self) -> PhaseName: ...
 
-    def execute(
-        self, view: WorldView, mutator: WorldMutator, ctx: TurnContext
-    ) -> PhaseResult: ...
+    def execute(self, view: WorldView, mutator: WorldMutator, ctx: TurnContext) -> PhaseResult: ...
 
 
 class NoOpPhase:
@@ -50,7 +48,5 @@ class NoOpPhase:
     def name(self) -> PhaseName:
         return self._name
 
-    def execute(
-        self, view: WorldView, mutator: WorldMutator, ctx: TurnContext
-    ) -> PhaseResult:
+    def execute(self, view: WorldView, mutator: WorldMutator, ctx: TurnContext) -> PhaseResult:
         return PhaseResult(phase_name=self._name.name)

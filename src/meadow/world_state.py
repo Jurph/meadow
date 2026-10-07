@@ -48,9 +48,7 @@ class WorldState:
 
     # --- WorldMutator ---
 
-    def apply_flow_delta(
-        self, h: HexCell, moisture_delta: float, nutrient_delta: float
-    ) -> None:
+    def apply_flow_delta(self, h: HexCell, moisture_delta: float, nutrient_delta: float) -> None:
         i = self._col_idx(h.q, h.r)
         self.moisture[i] += moisture_delta
         self.nutrients[i] += nutrient_delta

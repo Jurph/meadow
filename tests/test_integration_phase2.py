@@ -19,17 +19,17 @@ from meadow.world import TurnContext
 from meadow.world_state import WorldState
 
 
-def _build_phase2_pipeline(
-    rainfall: float = 1.0, sunlight: float = 1.0
-) -> TurnPipeline:
-    return TurnPipeline({
-        PhaseName.WEATHER: WeatherPhase(rainfall_per_tick=rainfall),
-        PhaseName.FLOW: FlowPhase(),
-        PhaseName.LIGHT: LightPhase(base_sunlight=sunlight),
-        PhaseName.UPTAKE: NoOpPhase(PhaseName.UPTAKE),
-        PhaseName.DEPLETION: NoOpPhase(PhaseName.DEPLETION),
-        PhaseName.GROWTH: NoOpPhase(PhaseName.GROWTH),
-    })
+def _build_phase2_pipeline(rainfall: float = 1.0, sunlight: float = 1.0) -> TurnPipeline:
+    return TurnPipeline(
+        {
+            PhaseName.WEATHER: WeatherPhase(rainfall_per_tick=rainfall),
+            PhaseName.FLOW: FlowPhase(),
+            PhaseName.LIGHT: LightPhase(base_sunlight=sunlight),
+            PhaseName.UPTAKE: NoOpPhase(PhaseName.UPTAKE),
+            PhaseName.DEPLETION: NoOpPhase(PhaseName.DEPLETION),
+            PhaseName.GROWTH: NoOpPhase(PhaseName.GROWTH),
+        }
+    )
 
 
 class TestPhase2Integration:

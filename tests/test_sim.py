@@ -9,16 +9,28 @@ from meadow.world import TurnContext
 
 
 class StubView:
-    def moisture_at(self, h: HexCell) -> float: return 0.0
-    def nutrients_at(self, h: HexCell) -> float: return 0.0
-    def light_at(self, h: HexCell) -> float: return 0.0
-    def occupant_id_at(self, col: Axial) -> int | None: return None
+    def moisture_at(self, h: HexCell) -> float:
+        return 0.0
+
+    def nutrients_at(self, h: HexCell) -> float:
+        return 0.0
+
+    def light_at(self, h: HexCell) -> float:
+        return 0.0
+
+    def occupant_id_at(self, col: Axial) -> int | None:
+        return None
 
 
 class StubMutator:
-    def apply_flow_delta(self, h: HexCell, md: float, nd: float) -> None: pass
-    def set_light(self, h: HexCell, v: float) -> None: pass
-    def set_occupant(self, col: Axial, pid: int | None) -> None: pass
+    def apply_flow_delta(self, h: HexCell, md: float, nd: float) -> None:
+        pass
+
+    def set_light(self, h: HexCell, v: float) -> None:
+        pass
+
+    def set_occupant(self, col: Axial, pid: int | None) -> None:
+        pass
 
 
 def _all_noop_phases() -> dict[PhaseName, NoOpPhase]:

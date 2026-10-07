@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import ast
 import re
+import sys
 from pathlib import Path
 
 try:
@@ -25,10 +26,10 @@ SCAN_DIRS = ("src", "tests", "scripts")
 # Add entries here when the import root differs from the published package name.
 CUSTOM_IMPORT_ROOTS: dict[str, set[str]] = {}
 
-# Add build/test/CI tools here if they should be exempt from import matching.
 TOOLING_DEPS = {
     "mypy",
     "pytest",
+    "pytest-cov",
     "ruff",
     "tomli",
 }
@@ -110,20 +111,13 @@ def main() -> int:
         if root not in {"__future__"} and root not in {".git", "src", "tests"}
     )
 
-    project_roots = {
-        path.name
-        for path in (REPO_ROOT / "src").iterdir()
-        if path.is_dir()
-    } if (REPO_ROOT / "src").exists() else set()
+    project_roots = (
+        {path.name for path in (REPO_ROOT / "src").iterdir() if path.is_dir()}
+        if (REPO_ROOT / "src").exists()
+        else set()
+    )
 
-    standard_exclusions = project_roots | {
-        "pathlib",
-        "typing",
-        "re",
-        "ast",
-        "tomllib",
-        "tomli",
-    }
+    standard_exclusions = project_roots | set(sys.stdlib_module_names) | {"tomli"}
 
     missing = sorted(
         root

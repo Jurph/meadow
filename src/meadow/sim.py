@@ -1,4 +1,4 @@
-﻿"""Turn pipeline: orchestrates phases in fixed order.
+"""Turn pipeline: orchestrates phases in fixed order.
 
 No physics here — just sequencing and validation.
 """

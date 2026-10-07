@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "meadow"
 version = "0.1.0"
-description = "Scaffolding for the meadow terrarium simulation."
+description = "Hex-grid terrarium simulation with a Python core and Godot client."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = ["numpy>=2.0"]

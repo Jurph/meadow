@@ -75,9 +75,7 @@ class FlowPhase:
     def name(self) -> PhaseName:
         return PhaseName.FLOW
 
-    def execute(
-        self, view: WorldView, mutator: WorldMutator, ctx: TurnContext
-    ) -> PhaseResult:
+    def execute(self, view: WorldView, mutator: WorldMutator, ctx: TurnContext) -> PhaseResult:
         if not isinstance(mutator, WorldState):
             raise TypeError("FlowPhase requires a WorldState mutator")
         m_delta, n_delta = _compute_flow_deltas(mutator)

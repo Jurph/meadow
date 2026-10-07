@@ -1,4 +1,4 @@
-﻿"""Plant domain: identity, traits, body plan, and population registry.
+"""Plant domain: identity, traits, body plan, and population registry.
 
 Growth forms (grass, taproot, woody) are parameter-driven, not subclass-driven.
 Leaf shape is encoded via number_of_lobes, lobe_aspect_ratio, and lobe_length

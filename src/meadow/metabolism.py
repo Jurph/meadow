@@ -1,4 +1,4 @@
-﻿"""Pure functions for plant metabolism.
+"""Pure functions for plant metabolism.
 
 Photosynthesis: Liebig's law — output limited by the scarcest input.
 Allocation: split cellulose by normalized trait weights.

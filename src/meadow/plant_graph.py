@@ -1,4 +1,4 @@
-﻿"""Graph representation of a plant's physical structure.
+"""Graph representation of a plant's physical structure.
 
 A plant body is a tree of Segments connecting HexCells. Active growth
 happens at GrowthTips which extend into neighboring cells each tick.

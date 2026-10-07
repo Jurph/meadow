@@ -1,4 +1,4 @@
-﻿"""Tests for metabolism pure functions."""
+"""Tests for metabolism pure functions."""
 
 import pytest
 
@@ -8,21 +8,15 @@ from meadow.plant import TraitBundle
 
 class TestPhotosynthesis:
     def test_limited_by_moisture(self):
-        result = compute_photosynthesis(
-            moisture=0.5, nutrients=10.0, light=1.0, leaf_area=200.0
-        )
+        result = compute_photosynthesis(moisture=0.5, nutrients=10.0, light=1.0, leaf_area=200.0)
         assert result == pytest.approx(0.5)
 
     def test_limited_by_nutrients(self):
-        result = compute_photosynthesis(
-            moisture=10.0, nutrients=0.3, light=1.0, leaf_area=200.0
-        )
+        result = compute_photosynthesis(moisture=10.0, nutrients=0.3, light=1.0, leaf_area=200.0)
         assert result == pytest.approx(0.3)
 
     def test_limited_by_effective_light(self):
-        result = compute_photosynthesis(
-            moisture=10.0, nutrients=10.0, light=1.0, leaf_area=50.0
-        )
+        result = compute_photosynthesis(moisture=10.0, nutrients=10.0, light=1.0, leaf_area=50.0)
         assert result == pytest.approx(1.0 * 50.0 / LEAF_AREA_UNIT)
 
     def test_zero_moisture_produces_nothing(self):

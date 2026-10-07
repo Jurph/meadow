@@ -1,4 +1,4 @@
-﻿"""Uptake phase: plants absorb moisture and nutrients from root tiles.
+"""Uptake phase: plants absorb moisture and nutrients from root tiles.
 
 Each root hex contributes: available_resource * root_reach.
 Absorbed amounts are deducted from the tile and added to plant reserves.
@@ -21,9 +21,7 @@ class UptakePhase:
     def name(self) -> PhaseName:
         return PhaseName.UPTAKE
 
-    def execute(
-        self, view: WorldView, mutator: WorldMutator, ctx: TurnContext
-    ) -> PhaseResult:
+    def execute(self, view: WorldView, mutator: WorldMutator, ctx: TurnContext) -> PhaseResult:
         total_moisture_taken = 0.0
         total_nutrient_taken = 0.0
         for plant in self._pop:

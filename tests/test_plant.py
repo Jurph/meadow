@@ -1,4 +1,4 @@
-﻿"""Tests for plant domain."""
+"""Tests for plant domain."""
 
 import pytest
 
