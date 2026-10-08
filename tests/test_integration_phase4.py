@@ -15,14 +15,15 @@ from meadow.light import LightPhase
 from meadow.phases import NoOpPhase, PhaseName
 from meadow.plant import PlantPopulation, TraitBundle
 from meadow.plant_graph import SegmentType
+from meadow.resources import ResourceVector
 from meadow.sim import TurnPipeline
 from meadow.uptake import UptakePhase
 from meadow.weather import WeatherPhase
 from meadow.world import TurnContext
 from meadow.world_state import WorldState
 
-# Growth spends from per-pool allocation; default 0.25 root share needs cellulose >= 4
-# before the root pool reaches cellulose_per_segment (1.0). Bias allocation for these tests.
+# Root-focused tests allocate all assimilate to roots so one complete construction
+# cost can be paid as soon as water, minerals, and assimilate are available.
 _ROOT_GROWTH_ALLOC = dict(alloc_root=1.0, alloc_leaf=0.0, alloc_stem=0.0, alloc_reproduce=0.0)
 
 
@@ -56,11 +57,11 @@ class TestPhase4Integration:
         pipeline = _build_phase4_pipeline(pop, grid, rainfall=10.0)
         _seed_nutrients(ws, 100.0)
 
-        initial_roots = len(plant.body.root_hexes)
+        initial_roots = len(plant.body.root_cells)
         for tick in range(10):
             pipeline.run_tick(ws, ws, TurnContext(tick=tick, weather_seed=42))
 
-        assert len(plant.body.root_hexes) > initial_roots
+        assert len(plant.body.root_cells) > initial_roots
 
     def test_roots_grow_downward(self):
         grid = HexGrid(10, 10)
@@ -74,7 +75,7 @@ class TestPhase4Integration:
         for tick in range(10):
             pipeline.run_tick(ws, ws, TurnContext(tick=tick, weather_seed=42))
 
-        root_zs = [c.z for c in plant.body.root_hexes]
+        root_zs = [cell.z for cell in plant.body.root_cells]
         assert min(root_zs) < 0, "Roots should extend underground"
 
     def test_hydrotropism_attracts_roots(self):
@@ -94,7 +95,7 @@ class TestPhase4Integration:
         for tick in range(15):
             pipeline.run_tick(ws, ws, TurnContext(tick=tick, weather_seed=42))
 
-        root_qs = [c.q for c in plant.body.root_hexes]
+        root_qs = [cell.q for cell in plant.body.root_cells]
         assert max(root_qs) > 5, "Roots should grow toward the wet columns (q>5)"
 
     def test_branching_creates_lateral_tips(self):
@@ -108,8 +109,8 @@ class TestPhase4Integration:
             **_ROOT_GROWTH_ALLOC,
         )
         plant = pop.register(home=HexCell(5, 5, 0), traits=traits)
-        # Branching pays for a lateral in the same pass as the primary segment.
-        plant.cellulose = 2.0
+        # Seed assimilate makes a primary and lateral root affordable once uptake runs.
+        plant.reserves.credit(ResourceVector(assimilate=2.0))
         pipeline = _build_phase4_pipeline(pop, grid, rainfall=20.0)
         _seed_nutrients(ws, 200.0)
 

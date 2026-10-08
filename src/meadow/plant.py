@@ -11,6 +11,12 @@ from dataclasses import dataclass, field
 
 from meadow.hex import HexCell
 from meadow.plant_graph import PlantGraph
+from meadow.resources import (
+    AssimilateAllocation,
+    PlantBalanceSheet,
+    ResourcePool,
+    ResourceVector,
+)
 
 _LOBE_SHAPE_FACTOR: float = 0.7
 
@@ -45,8 +51,16 @@ class TraitBundle:
     hydrotropism_weight: float = 0.3
     gsa_root: float = 60.0
 
-    # Growth cost
-    cellulose_per_segment: float = 1.0
+    # Construction cost vectors
+    root_construction_cost: ResourceVector = field(
+        default_factory=lambda: ResourceVector(water=0.1, minerals=0.1, assimilate=1.0)
+    )
+    stem_construction_cost: ResourceVector = field(
+        default_factory=lambda: ResourceVector(water=0.1, minerals=0.1, assimilate=1.0)
+    )
+    leaf_construction_cost: ResourceVector = field(
+        default_factory=lambda: ResourceVector(water=0.05, minerals=0.05, assimilate=0.25)
+    )
 
     @property
     def effective_leaf_area(self) -> float:
@@ -59,30 +73,14 @@ class TraitBundle:
 
 @dataclass
 class PlantBody:
-    """Spatial footprint of a plant on the hex grid."""
+    """A plant's crown and connected organ graph."""
 
     home: HexCell
-    graph: PlantGraph | None = None
-    _root_hexes: set[HexCell] | None = None
-    _leaf_hexes: set[HexCell] | None = None
-
-    def __post_init__(self):
-        if self.graph is None and self._root_hexes is None:
-            self._root_hexes = {self.home}
-        if self.graph is None and self._leaf_hexes is None:
-            self._leaf_hexes = {self.home}
+    graph: PlantGraph
 
     @property
-    def root_hexes(self) -> set[HexCell]:
-        if self.graph is not None:
-            return self.graph.root_cells
-        return self._root_hexes or set()
-
-    @property
-    def leaf_hexes(self) -> set[HexCell]:
-        if self.graph is not None:
-            return self.graph.leaf_cells
-        return self._leaf_hexes or set()
+    def root_cells(self) -> set[HexCell]:
+        return self.graph.root_cells
 
 
 @dataclass
@@ -90,9 +88,24 @@ class Plant:
     id: int
     traits: TraitBundle = field(default_factory=TraitBundle)
     body: PlantBody | None = None
-    moisture_reserve: float = 0.0
-    nutrient_reserve: float = 0.0
-    cellulose: float = 0.0
+    reserves: ResourcePool = field(default_factory=ResourcePool)
+    assimilate_allocation: AssimilateAllocation = field(default_factory=AssimilateAllocation)
+    balance_sheet: PlantBalanceSheet | None = None
+
+    def balance_sheet_for_tick(self, tick: int) -> PlantBalanceSheet:
+        """Return the open ledger for *tick*, creating it from current reserves."""
+        current = self.balance_sheet
+        if current is not None and current.tick == tick:
+            if current.closed:
+                raise RuntimeError(f"plant {self.id} balance sheet for tick {tick} is closed")
+            return current
+        if current is not None and not current.closed:
+            current.close(self.reserves.snapshot())
+        self.balance_sheet = PlantBalanceSheet.open(
+            tick=tick,
+            reserves=self.reserves.snapshot(),
+        )
+        return self.balance_sheet
 
 
 class PlantPopulation:
@@ -107,11 +120,16 @@ class PlantPopulation:
         traits: TraitBundle | None = None,
         home: HexCell | None = None,
     ) -> Plant:
+        plant_traits = traits or TraitBundle()
         if home is not None:
-            body = PlantBody(home=home, graph=PlantGraph.create_seed(home))
+            graph = PlantGraph.create_seed(
+                home,
+                leaf_area=plant_traits.effective_leaf_area,
+            )
+            body = PlantBody(home=home, graph=graph)
         else:
             body = None
-        plant = Plant(id=self._next_id, traits=traits or TraitBundle(), body=body)
+        plant = Plant(id=self._next_id, traits=plant_traits, body=body)
         self._plants[self._next_id] = plant
         self._next_id += 1
         return plant

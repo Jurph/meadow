@@ -1,9 +1,9 @@
 """Phase 3 integration: full tick with a real plant on a real grid.
 
 Key invariants:
-- Plant accumulates cellulose after one tick with moisture, nutrients, and light
-- Resources deducted from tiles match what the plant absorbed
-- Grass vs maple leaf traits produce different cellulose amounts
+- A plant accumulates assimilate from water and light
+- Soil resources transferred by roots are deducted from the world
+- Explicit leaf geometry changes assimilate production
 """
 
 from meadow.flow import FlowPhase
@@ -41,7 +41,7 @@ def _seed_uniform_nutrients(ws: WorldState, amount: float) -> None:
 
 
 class TestPhase3Integration:
-    def test_plant_gains_cellulose_after_tick(self):
+    def test_plant_gains_assimilate_after_tick(self):
         grid = HexGrid(5, 5)
         ws = WorldState(grid)
         _seed_uniform_nutrients(ws, 50.0)
@@ -51,7 +51,7 @@ class TestPhase3Integration:
 
         pipeline.run_tick(ws, ws, TurnContext(tick=0, weather_seed=0))
 
-        assert plant.cellulose > 0.0
+        assert plant.reserves.assimilate > 0.0
 
     def test_tile_moisture_reduced_by_uptake(self):
         grid = HexGrid(5, 5)
@@ -65,7 +65,7 @@ class TestPhase3Integration:
 
         assert ws.moisture_at(home) < 4.0
 
-    def test_grass_vs_maple_cellulose_difference(self):
+    def test_grass_vs_maple_assimilate_difference(self):
         grid = HexGrid(5, 5)
 
         ws_grass = WorldState(grid)
@@ -98,9 +98,9 @@ class TestPhase3Integration:
         pipe_maple = _build_phase3_pipeline(pop_maple, grid, rainfall=10.0)
         pipe_maple.run_tick(ws_maple, ws_maple, TurnContext(tick=0, weather_seed=0))
 
-        assert maple.cellulose > grass.cellulose
+        assert maple.reserves.assimilate > grass.reserves.assimilate
 
-    def test_five_ticks_cellulose_grows(self):
+    def test_five_ticks_leave_assimilate_or_constructed_organs(self):
         grid = HexGrid(5, 5)
         ws = WorldState(grid)
         _seed_uniform_nutrients(ws, 200.0)
@@ -111,7 +111,11 @@ class TestPhase3Integration:
         for tick in range(5):
             pipeline.run_tick(ws, ws, TurnContext(tick=tick, weather_seed=tick))
 
-        assert plant.cellulose > 0.0
+        assert plant.balance_sheet is not None
+        assert (
+            plant.reserves.assimilate > 0.0
+            or sum(plant.balance_sheet.organs_constructed.values()) > 0
+        )
 
     def test_full_tick_completes_with_6_results(self):
         grid = HexGrid(5, 5)

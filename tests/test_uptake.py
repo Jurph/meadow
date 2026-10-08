@@ -28,8 +28,11 @@ class TestUptakePhase:
 
         assert ws.moisture_at(home) == pytest.approx(5.0)
         assert ws.nutrients_at(home) == pytest.approx(3.0)
-        assert plant.moisture_reserve == pytest.approx(5.0)
-        assert plant.nutrient_reserve == pytest.approx(3.0)
+        assert plant.reserves.water == pytest.approx(5.0)
+        assert plant.reserves.minerals == pytest.approx(3.0)
+        assert plant.balance_sheet is not None
+        assert plant.balance_sheet.root_uptake.potential.water == pytest.approx(5.0)
+        assert plant.balance_sheet.root_uptake.actual.minerals == pytest.approx(3.0)
 
     def test_no_body_plant_skipped(self):
         ws = WorldState(HexGrid(3, 3))
@@ -49,8 +52,8 @@ class TestUptakePhase:
             ws.nutrients[ws._col_idx(home.q, home.r)] = 2.0
             UptakePhase(pop).execute(ws, ws, TurnContext(tick=tick, weather_seed=0))
 
-        assert plant.moisture_reserve == pytest.approx(6.0)
-        assert plant.nutrient_reserve == pytest.approx(3.0)
+        assert plant.reserves.water == pytest.approx(6.0)
+        assert plant.reserves.minerals == pytest.approx(3.0)
 
     def test_result_has_diagnostics(self):
         ws = WorldState(HexGrid(3, 3))

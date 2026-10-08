@@ -12,31 +12,36 @@ plants in interesting ways and let evolution do visible work.
 
 ## Status
 
-The Python simulation core is implemented through early physical plant growth:
+The Python simulation core is implemented through an auditable early plant resource loop:
 
 - 3D axial coordinates describe surface, root, and canopy cells
 - NumPy-backed world fields track moisture, nutrients, light, drainage, slope, and occupancy
 - an ordered six-phase tick runs weather, flow, light, uptake, depletion, and growth
-- parameterized plant traits drive photosynthesis, cellulose allocation, tropisms, and branching
-- plant bodies grow as segment graphs rather than fixed tile markers
+- plants hold water, mineral, and assimilate reserves with a reconciled per-tick balance sheet
+- persistent trait-weighted budgets fund complete root, stem, and leaf construction costs
+- explicit leaf organs drive photosynthesis from their area, health, and canopy-cell light
+- root and stem segments grow through gravitropism, hydrotropism, and branching
 
-The depletion phase is still a placeholder, and reproduction, mutation, death, decay, crowding,
-and canopy occlusion remain ahead.
+The depletion phase remains a placeholder. Transpiration, canopy occlusion, graph-constrained
+transport, simultaneous competition, maintenance, reproduction, mutation, death, decay, and
+crowding remain ahead.
 
 The production `Simulation` owns the world, population, phase pipeline, and tick counter. It emits
-deterministic, versioned JSON snapshots that keep mutable NumPy arrays and domain objects out of
-the renderer interface. The Godot client consumes that snapshot rather than reproducing simulation
-rules in GDScript.
+deterministic schema-v2 JSON snapshots that keep mutable NumPy arrays and domain objects out of the
+renderer interface. The Godot client consumes resource balances and organ geometry from that
+snapshot rather than reproducing simulation rules in GDScript.
 
 ## Current integrated experience
 
 The first end-to-end debug terrarium now works:
 
 - `meadow simulate` runs a seeded Python world for a requested number of ticks
-- the snapshot records world fields, plant reserves and traits, and root/stem segments
-- Godot colors the 7×7 tile field from simulated moisture and nutrients
-- one plant's 3D root and stem graph is rendered after ten ticks
-- a debug overlay reports tick, plant, segment, and reserve state
+- the snapshot records world fields, resource reserves, allocation budgets, potential and actual
+  balance-sheet fluxes, construction proposals and costs, limiting factors, and root/stem/leaf organs
+- Godot colors the 7×7 field from simulated soil resources and renders the complete organ graph
+- one plant grows visible roots, stems, and leaves through ten deterministic ticks
+- the debug overlay reports reserves, allocation, potential/actual uptake and photosynthesis,
+  proposed/completed construction, complete cost vectors, and limiting factors
 
 For the domain vocabulary, read [`CONTEXT.md`](CONTEXT.md). The target resource economy,
 competition rules, graph transport, and accounting invariants are specified in the

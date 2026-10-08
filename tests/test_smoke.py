@@ -32,11 +32,15 @@ def test_simulate_command_writes_renderer_snapshot(tmp_path: Path, capsys) -> No
     assert result == 0
     assert capsys.readouterr().out.strip() == str(output)
     payload = json.loads(output.read_text(encoding="utf-8"))
-    assert payload["schema_version"] == 1
+    assert payload["schema_version"] == 2
     assert payload["tick"] == 10
     assert payload["world"]["width"] == 7
     assert payload["world"]["height"] == 7
     assert len(payload["plants"]) == 1
+    plant = payload["plants"][0]
+    assert set(plant["resources"]) == {"water", "minerals", "assimilate"}
+    assert plant["balance_sheet"]["tick"] == 9
+    assert len(plant["leaves"]) > 1
     assert {segment["segment_type"] for segment in payload["plants"][0]["segments"]} == {
         "ROOT",
         "STEM",

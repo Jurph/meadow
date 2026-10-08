@@ -3,7 +3,8 @@
 import pytest
 
 from meadow.hex import HexCell
-from meadow.plant import PlantBody, PlantPopulation, TraitBundle
+from meadow.plant import PlantPopulation, TraitBundle
+from meadow.resources import ResourceVector
 
 
 class TestPlantPopulation:
@@ -74,25 +75,24 @@ class TestTraitBundle:
         assert t.alloc_root == t.alloc_leaf == t.alloc_stem == t.alloc_reproduce
 
     def test_zone_based_trait_defaults(self):
-        t = TraitBundle()
-        assert t.basal_length > 0
-        assert t.branch_spacing > 0
-        assert t.max_root_length > 0
-        assert t.gravitropism_weight > 0
-        assert t.cellulose_per_segment > 0
+        traits = TraitBundle()
+        assert traits.basal_length > 0
+        assert traits.branch_spacing > 0
+        assert traits.max_root_length > 0
+        assert traits.gravitropism_weight > 0
+        assert traits.root_construction_cost.assimilate > 0
+        assert traits.stem_construction_cost.assimilate > 0
+        assert traits.leaf_construction_cost.assimilate > 0
 
 
 class TestPlantBody:
-    def test_home_in_root_and_leaf_sets(self):
+    def test_seed_body_has_crown_root_and_explicit_leaf(self):
         home = HexCell(3, 3, 0)
-        body = PlantBody(home=home)
-        assert home in body.root_hexes
-        assert home in body.leaf_hexes
+        plant = PlantPopulation().register(home=home)
 
-    def test_body_starts_single_hex(self):
-        body = PlantBody(home=HexCell(0, 0, 0))
-        assert len(body.root_hexes) == 1
-        assert len(body.leaf_hexes) == 1
+        assert plant.body is not None
+        assert home in plant.body.root_cells
+        assert {leaf.cell for leaf in plant.body.graph.leaves.values()} == {home}
 
 
 class TestPlantWithBody:
@@ -108,11 +108,8 @@ class TestPlantWithBody:
         assert p.body is None
 
     def test_plant_reserves_start_at_zero(self):
-        pop = PlantPopulation()
-        p = pop.register(home=HexCell(0, 0, 0))
-        assert p.moisture_reserve == 0.0
-        assert p.nutrient_reserve == 0.0
-        assert p.cellulose == 0.0
+        plant = PlantPopulation().register(home=HexCell(0, 0, 0))
+        assert plant.reserves.snapshot() == ResourceVector()
 
     def test_register_with_home_creates_graph(self):
         pop = PlantPopulation()
@@ -121,12 +118,12 @@ class TestPlantWithBody:
         assert p.body.graph is not None
         assert len(p.body.graph.tips) == 2  # root + stem
 
-    def test_root_hexes_from_graph(self):
-        pop = PlantPopulation()
-        p = pop.register(home=HexCell(3, 3, 0))
-        assert HexCell(3, 3, 0) in p.body.root_hexes
+    def test_root_cells_from_graph(self):
+        plant = PlantPopulation().register(home=HexCell(3, 3, 0))
+        assert plant.body is not None
+        assert HexCell(3, 3, 0) in plant.body.root_cells
 
-    def test_leaf_hexes_from_graph(self):
-        pop = PlantPopulation()
-        p = pop.register(home=HexCell(3, 3, 0))
-        assert HexCell(3, 3, 0) in p.body.leaf_hexes
+    def test_leaf_organs_from_graph(self):
+        plant = PlantPopulation().register(home=HexCell(3, 3, 0))
+        assert plant.body is not None
+        assert len(plant.body.graph.leaves) == 1

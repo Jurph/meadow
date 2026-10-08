@@ -2,9 +2,23 @@
 
 ## Status
 
-This document defines Meadow's target simulation business rules. The current implementation contains an early subset: uniform rain and light, plant-wide reserves, cell-based root uptake, coarse photosynthesis, and cellulose-only segment construction. Rules marked here are targets until their roadmap item is implemented and tested.
+This document defines Meadow's target simulation business rules. The implemented foundation now
+includes:
 
-The model favors visible ecological tradeoffs and deterministic accounting over biochemical detail. Python remains authoritative; Godot only renders snapshots and diagnostics.
+- water, mineral, and assimilate reserves
+- persistent trait-weighted assimilate allocation
+- per-tick balance sheets for potential and actual uptake, photosynthesis, and construction
+- atomic water/mineral/assimilate construction costs
+- explicit leaf organs attached to stem nodes
+- leaf-area photosynthesis from canopy-cell light and available water
+- schema-v2 snapshots and Godot rendering for leaves, reserves, fluxes, costs, and constraints
+
+The current implementation still uses uniform rain and light, 2D world-resource columns,
+plant-wide reserves, sequential root uptake, and unconstrained graph transport. Transpiration,
+canopy interception, simultaneous competition, maintenance, and lifecycle rules remain targets.
+
+The model favors visible ecological tradeoffs and deterministic accounting over biochemical
+detail. Python remains authoritative; Godot only renders snapshots and diagnostics.
 
 ## Decisions
 
@@ -199,7 +213,7 @@ Each plant's tick diagnostics expose at least:
 - potential and actual photosynthesis
 - transport requested, delivered, and capacity-limited
 - maintenance demanded, paid, and unpaid
-- construction spending and accepted organ proposals by type
+- construction proposals, potential cost, actual spending, and accepted organ counts by type
 - each curtailed flux's limiting factor
 
 These diagnostics are simulation outputs. The renderer may visualize them but must not recompute them.

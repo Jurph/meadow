@@ -11,7 +11,7 @@ from typing import Protocol, runtime_checkable
 
 from meadow.hex import Axial, HexCell
 
-SIM_API_VERSION: int = 1
+SIM_API_VERSION: int = 2
 
 
 @dataclass(frozen=True)

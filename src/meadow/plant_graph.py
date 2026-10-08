@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum, auto
+from math import isfinite
 
 from meadow.hex import HexCell
 
@@ -33,6 +34,17 @@ class Segment:
 
 
 @dataclass
+class LeafOrgan:
+    """A photosynthetic surface organ attached to a stem node."""
+
+    id: int
+    attachment_segment_id: int | None
+    cell: HexCell
+    area: float
+    health: float = 1.0
+
+
+@dataclass
 class GrowthTip:
     """An active growth point at the frontier of the plant."""
 
@@ -48,15 +60,14 @@ class PlantGraph:
 
     def __init__(self) -> None:
         self._segments: dict[int, Segment] = {}
+        self._leaves: dict[int, LeafOrgan] = {}
         self._tips: list[GrowthTip] = []
-        self._next_id: int = 0
+        self._next_segment_id: int = 0
+        self._next_leaf_id: int = 0
 
     @classmethod
-    def create_seed(cls, home: HexCell) -> PlantGraph:
-        """Create a graph for a newly planted seed at *home*.
-
-        Starts with one root tip pointing down and one stem tip pointing up.
-        """
+    def create_seed(cls, home: HexCell, *, leaf_area: float) -> PlantGraph:
+        """Create a seed with root/stem tips and one crown leaf."""
         graph = cls()
         graph._tips.append(
             GrowthTip(
@@ -76,6 +87,7 @@ class PlantGraph:
                 accumulated_length=0.0,
             )
         )
+        graph.add_leaf(None, home, area=leaf_area)
         return graph
 
     def add_segment(
@@ -89,7 +101,7 @@ class PlantGraph:
         accumulated_length: float = 1.0,
     ) -> Segment:
         seg = Segment(
-            id=self._next_id,
+            id=self._next_segment_id,
             parent_id=parent_id,
             start=start,
             end=end,
@@ -98,13 +110,49 @@ class PlantGraph:
             order=order,
             accumulated_length=accumulated_length,
         )
-        self._segments[self._next_id] = seg
-        self._next_id += 1
+        self._segments[self._next_segment_id] = seg
+        self._next_segment_id += 1
         return seg
+
+    def add_leaf(
+        self,
+        attachment_segment_id: int | None,
+        cell: HexCell,
+        *,
+        area: float,
+        health: float = 1.0,
+    ) -> LeafOrgan:
+        """Attach a leaf to the crown or the end node of a stem segment."""
+        if not isfinite(area) or area < 0.0:
+            raise ValueError(f"leaf area must be non-negative finite, got {area}")
+        if not isfinite(health) or not 0.0 <= health <= 1.0:
+            raise ValueError(f"leaf health must be between 0 and 1, got {health}")
+        if attachment_segment_id is not None:
+            segment = self._segments.get(attachment_segment_id)
+            if segment is None:
+                raise ValueError(f"unknown attachment segment {attachment_segment_id}")
+            if segment.segment_type != SegmentType.STEM:
+                raise ValueError("leaf organs must attach to a stem segment")
+            if cell != segment.end:
+                raise ValueError("leaf cell must match the attachment stem end")
+        leaf = LeafOrgan(
+            id=self._next_leaf_id,
+            attachment_segment_id=attachment_segment_id,
+            cell=cell,
+            area=area,
+            health=health,
+        )
+        self._leaves[self._next_leaf_id] = leaf
+        self._next_leaf_id += 1
+        return leaf
 
     @property
     def segments(self) -> dict[int, Segment]:
         return self._segments
+
+    @property
+    def leaves(self) -> dict[int, LeafOrgan]:
+        return self._leaves
 
     @property
     def tips(self) -> list[GrowthTip]:
@@ -123,21 +171,6 @@ class PlantGraph:
         return cells
 
     @property
-    def leaf_cells(self) -> set[HexCell]:
-        cells: set[HexCell] = set()
-        for tip in self._tips:
-            if tip.segment_type == SegmentType.STEM:
-                cells.add(tip.cell)
-        if not cells:
-            for seg in self._segments.values():
-                if seg.segment_type == SegmentType.STEM:
-                    cells.add(seg.end)
-        if not cells:
-            for tip in self._tips:
-                cells.add(tip.cell)
-        return cells
-
-    @property
     def all_cells(self) -> set[HexCell]:
         cells: set[HexCell] = set()
         for seg in self._segments.values():
@@ -145,4 +178,6 @@ class PlantGraph:
             cells.add(seg.end)
         for tip in self._tips:
             cells.add(tip.cell)
+        for leaf in self._leaves.values():
+            cells.add(leaf.cell)
         return cells

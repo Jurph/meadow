@@ -8,6 +8,7 @@ const TILE_HEIGHT := 0.08
 
 var _root_material: StandardMaterial3D
 var _stem_material: StandardMaterial3D
+var _leaf_material: StandardMaterial3D
 var _seed_material: StandardMaterial3D
 
 
@@ -20,6 +21,10 @@ func _init() -> void:
 	_stem_material = StandardMaterial3D.new()
 	_stem_material.albedo_color = Color(0.55, 0.78, 0.24)
 	_stem_material.roughness = 0.75
+
+	_leaf_material = StandardMaterial3D.new()
+	_leaf_material.albedo_color = Color(0.34, 0.72, 0.22)
+	_leaf_material.roughness = 0.8
 
 	_seed_material = StandardMaterial3D.new()
 	_seed_material.albedo_color = Color(0.74, 0.66, 0.36)
@@ -86,6 +91,37 @@ func _spawn_plant(plant: Dictionary) -> void:
 	var segments: Array = plant["segments"]
 	for segment_value in segments:
 		_spawn_segment(segment_value as Dictionary, plant_id)
+
+	var leaves: Array = plant["leaves"]
+	for leaf_value in leaves:
+		_spawn_leaf(leaf_value as Dictionary, plant_id)
+
+
+func _spawn_leaf(leaf: Dictionary, plant_id: int) -> void:
+	var area := float(leaf["area"])
+	var health := float(leaf["health"])
+	var radius := clampf(sqrt(maxf(area, 0.0)) / 35.0, 0.1, 0.5)
+
+	var mesh := SphereMesh.new()
+	mesh.radius = radius
+	mesh.height = radius * 2.0
+	mesh.radial_segments = 12
+	mesh.rings = 6
+
+	var material := _leaf_material.duplicate() as StandardMaterial3D
+	material.albedo_color = Color(0.45, 0.28, 0.12).lerp(
+		_leaf_material.albedo_color,
+		health,
+	)
+
+	var mesh_instance := MeshInstance3D.new()
+	mesh_instance.name = "Plant_%d_LEAF_%d" % [plant_id, int(leaf["id"])]
+	mesh_instance.mesh = mesh
+	mesh_instance.scale = Vector3(1.0, 0.18, 0.7)
+	mesh_instance.rotation.y = float(int(leaf["id"])) * 2.399963
+	mesh_instance.position = cell_to_world(leaf["cell"] as Dictionary)
+	mesh_instance.set_surface_override_material(0, material)
+	add_child(mesh_instance)
 
 
 func _spawn_segment(segment: Dictionary, plant_id: int) -> void:

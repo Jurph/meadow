@@ -1,15 +1,172 @@
 {
   "plants": [
     {
-      "cellulose": 0.11999999999999966,
+      "assimilate_allocation": {
+        "leaf": 4.546000000000001,
+        "reproduce": 0.0,
+        "root": 0.5920000000000005,
+        "stem": 0.7960000000000003
+      },
+      "balance_sheet": {
+        "closing": {
+          "assimilate": 5.934000000000001,
+          "minerals": 163.84990904563202,
+          "water": 138.56513884198284
+        },
+        "construction": {
+          "assimilate": 3.25,
+          "minerals": 0.35000000000000003,
+          "water": 0.35000000000000003
+        },
+        "construction_limiting_factors": [
+          "root_allocation"
+        ],
+        "construction_potential": {
+          "assimilate": 5.25,
+          "minerals": 0.55,
+          "water": 0.55
+        },
+        "opening": {
+          "assimilate": 4.144,
+          "minerals": 128.4984222461797,
+          "water": 96.41267068096153
+        },
+        "organ_proposals": [
+          {
+            "count": 1,
+            "organ_type": "leaf"
+          },
+          {
+            "count": 4,
+            "organ_type": "root"
+          },
+          {
+            "count": 1,
+            "organ_type": "stem"
+          }
+        ],
+        "organs_constructed": [
+          {
+            "count": 1,
+            "organ_type": "leaf"
+          },
+          {
+            "count": 2,
+            "organ_type": "root"
+          },
+          {
+            "count": 1,
+            "organ_type": "stem"
+          }
+        ],
+        "photosynthesis": {
+          "actual": {
+            "assimilate": 5.04,
+            "minerals": 0.0,
+            "water": 0.0
+          },
+          "limiting_factors": [],
+          "potential": {
+            "assimilate": 5.04,
+            "minerals": 0.0,
+            "water": 0.0
+          }
+        },
+        "photosynthesis_water": 5.04,
+        "root_uptake": {
+          "actual": {
+            "assimilate": 0.0,
+            "minerals": 35.701486799452326,
+            "water": 47.54246816102129
+          },
+          "limiting_factors": [],
+          "potential": {
+            "assimilate": 0.0,
+            "minerals": 35.701486799452326,
+            "water": 47.54246816102129
+          }
+        },
+        "tick": 9
+      },
       "home": {
         "q": 3,
         "r": 3,
         "z": 0
       },
       "id": 0,
-      "moisture_reserve": 216.72495450325957,
-      "nutrient_reserve": 230.10862776376368,
+      "leaves": [
+        {
+          "area": 100.8,
+          "attachment_segment_id": null,
+          "cell": {
+            "q": 3,
+            "r": 3,
+            "z": 0
+          },
+          "health": 1.0,
+          "id": 0
+        },
+        {
+          "area": 100.8,
+          "attachment_segment_id": 1,
+          "cell": {
+            "q": 3,
+            "r": 3,
+            "z": 1
+          },
+          "health": 1.0,
+          "id": 1
+        },
+        {
+          "area": 100.8,
+          "attachment_segment_id": 4,
+          "cell": {
+            "q": 3,
+            "r": 3,
+            "z": 2
+          },
+          "health": 1.0,
+          "id": 2
+        },
+        {
+          "area": 100.8,
+          "attachment_segment_id": 7,
+          "cell": {
+            "q": 3,
+            "r": 3,
+            "z": 3
+          },
+          "health": 1.0,
+          "id": 3
+        },
+        {
+          "area": 100.8,
+          "attachment_segment_id": 10,
+          "cell": {
+            "q": 3,
+            "r": 3,
+            "z": 4
+          },
+          "health": 1.0,
+          "id": 4
+        },
+        {
+          "area": 100.8,
+          "attachment_segment_id": 15,
+          "cell": {
+            "q": 3,
+            "r": 3,
+            "z": 5
+          },
+          "health": 1.0,
+          "id": 5
+        }
+      ],
+      "resources": {
+        "assimilate": 5.934000000000001,
+        "minerals": 163.84990904563202,
+        "water": 138.56513884198284
+      },
       "segments": [
         {
           "accumulated_length": 1.0,
@@ -21,7 +178,7 @@
           },
           "id": 0,
           "order": 0,
-          "parent_id": -1,
+          "parent_id": null,
           "segment_type": "ROOT",
           "start": {
             "q": 3,
@@ -39,7 +196,7 @@
           },
           "id": 1,
           "order": 0,
-          "parent_id": -1,
+          "parent_id": null,
           "segment_type": "STEM",
           "start": {
             "q": 3,
@@ -66,21 +223,21 @@
           }
         },
         {
-          "accumulated_length": 1.0,
+          "accumulated_length": 3.0,
           "diameter": 1.0,
           "end": {
-            "q": 4,
+            "q": 3,
             "r": 3,
-            "z": -1
+            "z": -3
           },
           "id": 3,
-          "order": 1,
+          "order": 0,
           "parent_id": 2,
           "segment_type": "ROOT",
           "start": {
             "q": 3,
             "r": 3,
-            "z": -1
+            "z": -2
           }
         },
         {
@@ -102,39 +259,39 @@
           }
         },
         {
-          "accumulated_length": 1.0,
+          "accumulated_length": 4.0,
           "diameter": 1.0,
           "end": {
-            "q": 4,
+            "q": 3,
             "r": 3,
-            "z": 1
+            "z": -4
           },
           "id": 5,
-          "order": 1,
-          "parent_id": 4,
-          "segment_type": "STEM",
-          "start": {
-            "q": 3,
-            "r": 3,
-            "z": 1
-          }
-        },
-        {
-          "accumulated_length": 3.0,
-          "diameter": 1.0,
-          "end": {
-            "q": 3,
-            "r": 3,
-            "z": -3
-          },
-          "id": 6,
           "order": 0,
-          "parent_id": 2,
+          "parent_id": 3,
           "segment_type": "ROOT",
           "start": {
             "q": 3,
             "r": 3,
-            "z": -2
+            "z": -3
+          }
+        },
+        {
+          "accumulated_length": 5.0,
+          "diameter": 1.0,
+          "end": {
+            "q": 3,
+            "r": 3,
+            "z": -5
+          },
+          "id": 6,
+          "order": 0,
+          "parent_id": 5,
+          "segment_type": "ROOT",
+          "start": {
+            "q": 3,
+            "r": 3,
+            "z": -4
           }
         },
         {
@@ -156,93 +313,21 @@
           }
         },
         {
-          "accumulated_length": 2.0,
-          "diameter": 1.0,
-          "end": {
-            "q": 4,
-            "r": 3,
-            "z": -2
-          },
-          "id": 8,
-          "order": 1,
-          "parent_id": 3,
-          "segment_type": "ROOT",
-          "start": {
-            "q": 4,
-            "r": 3,
-            "z": -1
-          }
-        },
-        {
-          "accumulated_length": 1.0,
-          "diameter": 1.0,
-          "end": {
-            "q": 5,
-            "r": 3,
-            "z": -1
-          },
-          "id": 9,
-          "order": 2,
-          "parent_id": 8,
-          "segment_type": "ROOT",
-          "start": {
-            "q": 4,
-            "r": 3,
-            "z": -1
-          }
-        },
-        {
-          "accumulated_length": 2.0,
-          "diameter": 1.0,
-          "end": {
-            "q": 4,
-            "r": 3,
-            "z": 2
-          },
-          "id": 10,
-          "order": 1,
-          "parent_id": 5,
-          "segment_type": "STEM",
-          "start": {
-            "q": 4,
-            "r": 3,
-            "z": 1
-          }
-        },
-        {
-          "accumulated_length": 1.0,
-          "diameter": 1.0,
-          "end": {
-            "q": 5,
-            "r": 3,
-            "z": 1
-          },
-          "id": 11,
-          "order": 2,
-          "parent_id": 10,
-          "segment_type": "STEM",
-          "start": {
-            "q": 4,
-            "r": 3,
-            "z": 1
-          }
-        },
-        {
-          "accumulated_length": 4.0,
+          "accumulated_length": 6.0,
           "diameter": 1.0,
           "end": {
             "q": 3,
             "r": 3,
-            "z": -4
+            "z": -6
           },
-          "id": 12,
+          "id": 8,
           "order": 0,
           "parent_id": 6,
           "segment_type": "ROOT",
           "start": {
             "q": 3,
             "r": 3,
-            "z": -3
+            "z": -5
           }
         },
         {
@@ -251,16 +336,16 @@
           "end": {
             "q": 4,
             "r": 3,
-            "z": -3
+            "z": -5
           },
-          "id": 13,
+          "id": 9,
           "order": 1,
-          "parent_id": 12,
+          "parent_id": 8,
           "segment_type": "ROOT",
           "start": {
             "q": 3,
             "r": 3,
-            "z": -3
+            "z": -5
           }
         },
         {
@@ -271,7 +356,7 @@
             "r": 3,
             "z": 4
           },
-          "id": 14,
+          "id": 10,
           "order": 0,
           "parent_id": 7,
           "segment_type": "STEM",
@@ -279,6 +364,96 @@
             "q": 3,
             "r": 3,
             "z": 3
+          }
+        },
+        {
+          "accumulated_length": 7.0,
+          "diameter": 1.0,
+          "end": {
+            "q": 3,
+            "r": 3,
+            "z": -7
+          },
+          "id": 11,
+          "order": 0,
+          "parent_id": 8,
+          "segment_type": "ROOT",
+          "start": {
+            "q": 3,
+            "r": 3,
+            "z": -6
+          }
+        },
+        {
+          "accumulated_length": 1.0,
+          "diameter": 1.0,
+          "end": {
+            "q": 4,
+            "r": 3,
+            "z": -6
+          },
+          "id": 12,
+          "order": 1,
+          "parent_id": 11,
+          "segment_type": "ROOT",
+          "start": {
+            "q": 3,
+            "r": 3,
+            "z": -6
+          }
+        },
+        {
+          "accumulated_length": 2.0,
+          "diameter": 1.0,
+          "end": {
+            "q": 4,
+            "r": 3,
+            "z": -6
+          },
+          "id": 13,
+          "order": 1,
+          "parent_id": 9,
+          "segment_type": "ROOT",
+          "start": {
+            "q": 4,
+            "r": 3,
+            "z": -5
+          }
+        },
+        {
+          "accumulated_length": 1.0,
+          "diameter": 1.0,
+          "end": {
+            "q": 5,
+            "r": 3,
+            "z": -5
+          },
+          "id": 14,
+          "order": 2,
+          "parent_id": 13,
+          "segment_type": "ROOT",
+          "start": {
+            "q": 4,
+            "r": 3,
+            "z": -5
+          }
+        },
+        {
+          "accumulated_length": 5.0,
+          "diameter": 1.0,
+          "end": {
+            "q": 3,
+            "r": 3,
+            "z": 5
+          },
+          "id": 15,
+          "order": 0,
+          "parent_id": 10,
+          "segment_type": "STEM",
+          "start": {
+            "q": 3,
+            "r": 3,
+            "z": 4
           }
         }
       ],
@@ -291,20 +466,34 @@
         "basal_length": 1.0,
         "branch_probability": 0.5,
         "branch_spacing": 0.8,
-        "cellulose_per_segment": 1.0,
         "gravitropism_weight": 1.0,
         "gsa_root": 60.0,
         "hydrotropism_weight": 0.0,
+        "leaf_construction_cost": {
+          "assimilate": 0.25,
+          "minerals": 0.05,
+          "water": 0.05
+        },
         "lobe_aspect_ratio": 1.0,
         "lobe_length": 12.0,
         "max_root_length": 15.0,
         "number_of_lobes": 1.0,
-        "root_reach": 0.3
+        "root_construction_cost": {
+          "assimilate": 1.0,
+          "minerals": 0.1,
+          "water": 0.1
+        },
+        "root_reach": 0.3,
+        "stem_construction_cost": {
+          "assimilate": 1.0,
+          "minerals": 0.1,
+          "water": 0.1
+        }
       }
     }
   ],
-  "schema_version": 1,
-  "sim_api_version": 1,
+  "schema_version": 2,
+  "sim_api_version": 2,
   "tick": 10,
   "tiles": [
     {
@@ -574,8 +763,8 @@
     {
       "drainage": 1.0,
       "light": 1.0,
-      "moisture": 3.19091199674044,
-      "nutrients": 0.006571236236353429,
+      "moisture": 0.6308611580172254,
+      "nutrients": 9.095436801298613e-05,
       "occupant_id": 0,
       "q": 3,
       "r": 3,
@@ -651,8 +840,8 @@
     {
       "drainage": 1.0,
       "light": 1.0,
-      "moisture": 13.864133500000001,
-      "nutrients": 5.764800999999999,
+      "moisture": 35.77,
+      "nutrients": 34.3,
       "occupant_id": null,
       "q": 4,
       "r": 3,
@@ -728,8 +917,8 @@
     {
       "drainage": 1.0,
       "light": 1.0,
-      "moisture": 51.1,
-      "nutrients": 49.0,
+      "moisture": 100.0,
+      "nutrients": 100.0,
       "occupant_id": null,
       "q": 5,
       "r": 3,
