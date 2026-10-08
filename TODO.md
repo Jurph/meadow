@@ -28,9 +28,15 @@ Build a plant-evolution terrarium on a hex grid:
 ## Known constraints
 
 - world fields are still 2D; cells at different `z` levels read the same column resources
+- light and rainfall are uniform; humidity, wind, percolation, and canopy interception are absent
+- leaves are inferred from stem tips rather than represented as explicit organs
+- root uptake is sequential and based on unique occupied columns, not simultaneous capacity claims
+- plant-wide moisture and nutrient reserves bypass graph transport constraints
+- photosynthesis produces `cellulose` directly; transpiration, maintenance, and resource balance
+  sheets are not implemented
 - depletion is a no-op
 - occupancy and crowding are stored but not enforced during growth
-- reproduction, mutation, death, decay, and canopy occlusion are not implemented
+- reproduction, mutation, death, and decay are not implemented
 - Python-to-Godot transport is a generated JSON file, not a live process connection
 - snapshots are write-only; save loading and replay are not implemented
 
@@ -48,7 +54,15 @@ Build a plant-evolution terrarium on a hex grid:
 - [x] Define a versioned, immutable world snapshot.
 - [x] Make the CLI run ticks and emit a snapshot.
 - [x] Render Python-produced tile and plant state in Godot.
-- [ ] Add occupancy and crowding rules before allowing unrestricted multi-plant growth.
+- [ ] Implement the [`Plant Functional Model`](docs/plant-functional-model.md):
+  - [ ] replace `cellulose` with water, mineral, and assimilate balance-sheet semantics
+  - [ ] represent leaves as explicit organs attached to stem nodes
+  - [ ] derive root uptake capacity and leaf gas-exchange capacity from organ geometry
+  - [ ] add humidity, wind, transpiration, and top-down canopy interception
+  - [ ] resolve contested soil resources and same-layer light proportionally
+  - [ ] constrain water, mineral, and assimilate delivery through the organ graph
+  - [ ] add maintenance demand, health, construction cost vectors, and limiting-factor diagnostics
+- [ ] Add occupancy and crowding rules against the functional organ model.
 - [ ] Complete the lifecycle loop: reproduction, mutation, death, depletion, and decay.
 - [ ] Add live snapshot regeneration/reload only after the file seam remains stable.
 
@@ -74,4 +88,6 @@ Build a plant-evolution terrarium on a hex grid:
 - let rendering consume stable snapshots rather than own simulation state
 - keep ecology rules and presentation concerns separate
 - avoid duplicate world rules in Python and GDScript
+- resolve shared resource claims from phase-start state, never plant iteration order
+- record every plant resource source, sink, constraint, and reserve change in its balance sheet
 - prefer one observable end-to-end slice over another isolated subsystem

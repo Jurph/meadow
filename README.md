@@ -38,7 +38,10 @@ The first end-to-end debug terrarium now works:
 - one plant's 3D root and stem graph is rendered after ten ticks
 - a debug overlay reports tick, plant, segment, and reserve state
 
-For the working roadmap, start with `TODO.md`.
+For the domain vocabulary, read [`CONTEXT.md`](CONTEXT.md). The target resource economy,
+competition rules, graph transport, and accounting invariants are specified in the
+[`Plant Functional Model`](docs/plant-functional-model.md). For implementation order, start with
+[`TODO.md`](TODO.md).
 
 ## Development setup
 
